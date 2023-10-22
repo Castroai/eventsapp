@@ -15,6 +15,8 @@ export default class HttpService {
     eventName: string;
     description: string;
     status: string;
+    lat: number;
+    long: number;
   }) {
     return await this.instance.post("/event", data);
   }
