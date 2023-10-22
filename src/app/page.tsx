@@ -3,9 +3,11 @@ import { prisma } from "./lib/prisma";
 import { EventCard } from "./components/EventCard";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./lib/auth";
+import { SearchComponent } from "./components/SearchComponent";
 
 export default async function Home() {
   let allItems;
+  // All Published Events
   const items = await prisma.event.findMany({
     where: {
       status: {
@@ -13,6 +15,7 @@ export default async function Home() {
       },
     },
   });
+  // Get the current user
   const user = await getServerSession(authOptions);
   if (user) {
     const prismaUser = await prisma.user.findUnique({
@@ -23,7 +26,9 @@ export default async function Home() {
         eventsAttending: {},
       },
     });
+    // All events that user is attending
     const eventIdAttending = prismaUser!.eventsAttending.map((i) => i.eventId);
+    // create a new array, with a key in each object attending
     allItems = items.map((item) => {
       if (eventIdAttending.includes(item.id)) {
         return {
@@ -42,8 +47,9 @@ export default async function Home() {
   }
 
   return (
-    <div className="mx-auto container flex flex-col">
+    <div className="mx-auto container flex flex-col gap-5">
       <DefaultNavbar />
+      <SearchComponent />
       <div className="grid grid-cols-5 gap-4">
         {allItems.map((i, index) => {
           return (

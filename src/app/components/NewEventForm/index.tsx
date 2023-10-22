@@ -25,6 +25,8 @@ export const NewEventForm = ({
     location: "",
     eventName: "",
     description: "",
+    lat: 0,
+    long: 0,
   };
   const [form, setForm] = useState(initialValue);
   const [successOrFail, setSuccessOrFail] = useState<"SUCCESS" | "FAIL" | null>(
@@ -56,7 +58,7 @@ export const NewEventForm = ({
   );
   const options = {
     componentRestrictions: { country: "us" },
-    fields: ["name", "formatted_address"],
+    fields: ["name", "formatted_address", "geometry"],
     types: [],
   };
   useEffect(() => {
@@ -70,6 +72,15 @@ export const NewEventForm = ({
     // Add a listener
     autocomplete.addListener("place_changed", () => {
       const selectedPlace = autocomplete.getPlace();
+      console.log(selectedPlace);
+      if (selectedPlace.geometry) {
+        const lat = selectedPlace.geometry.location?.lat;
+        const long = selectedPlace.geometry.location?.lng;
+        if (lat && long) {
+          setForm((current) => ({ ...current, lat: lat(), long: long() }));
+        }
+      }
+
       setForm((current) => ({
         ...current,
         location: selectedPlace.formatted_address as string,

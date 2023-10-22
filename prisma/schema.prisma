@@ -74,6 +74,8 @@ model Event {
   description String
   date        DateTime
   location    String
+  lat         Float
+  long        Float
   status      EventStatus            @default(PUBLISHED)
   organizer   User                   @relation(fields: [organizerId], references: [id])
   organizerId String

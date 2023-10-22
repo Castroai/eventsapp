@@ -7,6 +7,7 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
   const attend = async (eventId: number) => {
     return await httpInstance.attendEvent({ eventId });
   };
+
   return (
     <div>
       <ul>
