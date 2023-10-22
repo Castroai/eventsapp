@@ -43,8 +43,10 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
+  role          UserRole  @default(ATTENDEE)
   accounts      Account[]
   sessions      Session[]
+  Event         Event[]
 }
 
 model VerificationToken {
@@ -53,4 +55,25 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+enum UserRole {
+  ORGANIZER
+  ATTENDEE
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  eventName   String
+  description String
+  date        DateTime
+  location    String
+  organizer   User     @relation(fields: [organizerId], references: [id])
+  organizerId String
+}
+
+model Attendee {
+  id      Int @id @default(autoincrement())
+  eventId Int
+  userId  Int
 }

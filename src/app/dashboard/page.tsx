@@ -1,20 +1,30 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../lib/auth";
+"use client";
 
-export default async function Dashboard() {
-  const session = await getServerSession(authOptions);
+import { ReactNode, useState } from "react";
+import DashboardLayout from "../components/DashboardLayout";
+import { NewEventForm } from "../components/NewEventForm";
+import { Button, Modal } from "flowbite-react";
+
+export default function Dashboard({ children }: { children: ReactNode }) {
+  const [openModal, setOpenModal] = useState<string | undefined>();
+  const props = { openModal, setOpenModal };
   return (
-    <div className="mx-auto container">
-      <h2>My Amazing App</h2>
+    <DashboardLayout>
+      <div>
+        <Button onClick={() => props.setOpenModal("default")}>
+          Create New Event
+        </Button>
 
-      {session && (
-        <div>
-          <p>Signed in as {session.user && session.user.name}</p>
-          <a href="/api/auth/signout">Sign out by link</a>
-        </div>
-      )}
-
-      {!session && <p>Not signed in</p>}
-    </div>
+        <Modal
+          show={props.openModal === "default"}
+          onClose={() => props.setOpenModal(undefined)}
+        >
+          <Modal.Header>Create New Event</Modal.Header>
+          <Modal.Body>
+            <NewEventForm />
+          </Modal.Body>
+        </Modal>
+      </div>
+    </DashboardLayout>
   );
 }
