@@ -1,15 +1,7 @@
 "use client";
 
 import { Sidebar } from "flowbite-react";
-import {
-  HiArrowSmRight,
-  HiChartPie,
-  HiInbox,
-  HiShoppingBag,
-  HiTable,
-  HiUser,
-  HiViewBoards,
-} from "react-icons/hi";
+import { HiChartPie } from "react-icons/hi";
 
 export default function SideBar() {
   return (

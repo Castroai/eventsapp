@@ -1,6 +1,6 @@
 "use client";
 import HttpService from "@/app/lib/prisma";
-import { Event, User } from "@prisma/client";
+import { Event } from "@prisma/client";
 import { Button } from "flowbite-react";
 const httpInstance = new HttpService();
 export const EventCard = (i: Event & { attending?: boolean }) => {
@@ -19,6 +19,7 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
         >
           {i.attending ? "Attending" : "Intrested"}
         </Button>
+        <li>Address: {i.location}</li>
       </ul>
     </div>
   );

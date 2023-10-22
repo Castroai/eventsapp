@@ -1,8 +1,11 @@
+"use client";
 import {
   ChangeEvent,
   Dispatch,
   FormEvent,
   SetStateAction,
+  useEffect,
+  useRef,
   useState,
 } from "react";
 import { Datepicker } from "flowbite-react";
@@ -33,15 +36,12 @@ export const NewEventForm = ({
       e.preventDefault();
       await instance.createEvent({ ...form, status: status });
       setSuccessOrFail("SUCCESS");
-      setTimeout(() => {
-        setOpenModal(undefined);
-      }, 2000);
     } catch (error) {
       setSuccessOrFail("FAIL");
-      setTimeout(() => {
-        setOpenModal(undefined);
-      }, 2000);
     }
+    setTimeout(() => {
+      setOpenModal(undefined);
+    }, 2000);
   };
   const changeHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -49,6 +49,37 @@ export const NewEventForm = ({
     const { value, name } = e.target;
     setForm((current) => ({ ...current, [name]: value }));
   };
+
+  const autoCompleteRef = useRef<google.maps.places.Autocomplete>();
+  const inputRef = useRef(
+    document.getElementById("autocomplete") as HTMLInputElement
+  );
+  const options = {
+    componentRestrictions: { country: "us" },
+    fields: ["name", "formatted_address"],
+    types: [],
+  };
+  useEffect(() => {
+    // Set the Ref to the autocomplete instance
+    autoCompleteRef.current = new window.google.maps.places.Autocomplete(
+      inputRef.current,
+      options
+    );
+    // Reference the current value
+    const autocomplete = autoCompleteRef.current;
+    // Add a listener
+    autocomplete.addListener("place_changed", () => {
+      const selectedPlace = autocomplete.getPlace();
+      setForm((current) => ({
+        ...current,
+        location: selectedPlace.formatted_address as string,
+      }));
+    });
+    return () => {
+      window.google.maps.event.clearInstanceListeners(autocomplete);
+    };
+  }, []);
+
   if (successOrFail !== null) {
     return (
       <Confirmation
@@ -61,6 +92,7 @@ export const NewEventForm = ({
       />
     );
   }
+
   return (
     <div>
       <form
@@ -84,16 +116,15 @@ export const NewEventForm = ({
         </div>
         <div>
           <div className="mb-2 block">
-            <Label htmlFor="location" value="Location" />
+            <Label htmlFor="autocomplete" value="Location" />
           </div>
           <TextInput
+            ref={inputRef}
             name="location"
-            id="location"
+            id="autocomplete"
             placeholder="Location"
             required
             type="text"
-            value={form.location}
-            onChange={changeHandler}
           />
         </div>
 
