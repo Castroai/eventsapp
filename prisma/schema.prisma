@@ -38,15 +38,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          UserRole  @default(ATTENDEE)
-  accounts      Account[]
-  sessions      Session[]
-  Event         Event[]
+  id              String                 @id @default(cuid())
+  name            String?
+  email           String?                @unique
+  emailVerified   DateTime?
+  image           String?
+  role            UserRole               @default(ATTENDEE)
+  accounts        Account[]
+  sessions        Session[]
+  events          Event[]
+  eventsAttending UsersAttendingEvents[]
 }
 
 model VerificationToken {
@@ -62,18 +63,28 @@ enum UserRole {
   ATTENDEE
 }
 
+enum EventStatus {
+  DRAFT
+  PUBLISHED
+}
+
 model Event {
-  id          Int      @id @default(autoincrement())
+  id          Int                    @id @default(autoincrement())
   eventName   String
   description String
   date        DateTime
   location    String
-  organizer   User     @relation(fields: [organizerId], references: [id])
+  status      EventStatus            @default(PUBLISHED)
+  organizer   User                   @relation(fields: [organizerId], references: [id])
   organizerId String
+  users       UsersAttendingEvents[]
 }
 
-model Attendee {
-  id      Int @id @default(autoincrement())
-  eventId Int
-  userId  Int
+model UsersAttendingEvents {
+  event   Event  @relation(fields: [eventId], references: [id])
+  eventId Int // relation scalar field (used in the `@relation` attribute above)
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String
+
+  @@id([eventId, userId])
 }

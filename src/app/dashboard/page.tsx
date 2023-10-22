@@ -21,7 +21,7 @@ export default function Dashboard({ children }: { children: ReactNode }) {
         >
           <Modal.Header>Create New Event</Modal.Header>
           <Modal.Body>
-            <NewEventForm />
+            <NewEventForm setOpenModal={setOpenModal} />
           </Modal.Body>
         </Modal>
       </div>

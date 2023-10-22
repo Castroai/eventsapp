@@ -6,7 +6,7 @@ export const prisma = new PrismaClient();
 export default class HttpService {
   constructor(
     private instance = axios.create({
-      baseURL: "/api/event",
+      baseURL: "/api",
     })
   ) {}
   public async createEvent(data: {
@@ -14,7 +14,13 @@ export default class HttpService {
     location: string;
     eventName: string;
     description: string;
+    status: string;
   }) {
-    return await this.instance.post("", data);
+    return await this.instance.post("/event", data);
+  }
+  public async attendEvent({ eventId }: { eventId: number }) {
+    return await this.instance.put("/user", {
+      id: eventId,
+    });
   }
 }
