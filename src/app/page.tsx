@@ -49,6 +49,7 @@ export default async function Home() {
   return (
     <div className="mx-auto container flex flex-col gap-5">
       <DefaultNavbar />
+      <h1>Search For Events Near You</h1>
       <SearchComponent />
       <div className="grid grid-cols-5 gap-4">
         {allItems.map((i, index) => {

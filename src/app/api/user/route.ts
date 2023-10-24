@@ -33,7 +33,9 @@ export async function PUT(request: Request) {
         },
       });
       console.log("User has unattended the event.");
-      return NextResponse.json(res);
+      return NextResponse.json({
+        attending: false,
+      });
     } else {
       // If the user is not attending, add a new attendance record
       const res = await prisma.usersAttendingEvents.create({
@@ -43,7 +45,7 @@ export async function PUT(request: Request) {
         },
       });
       console.log("User is now attending the event.");
-      return NextResponse.json(res);
+      return NextResponse.json({ ...res, attending: true });
     }
   } else {
     return NextResponse.error();
