@@ -25,4 +25,13 @@ export default class HttpService {
       id: eventId,
     });
   }
+  public async searchEvents({ lat, long }: { lat: number; long: number }) {
+    return await this.instance.post("/event/search", {
+      lat: lat,
+      long: long,
+    });
+  }
+  public async allEvents() {
+    return await this.instance.get("/event/search");
+  }
 }

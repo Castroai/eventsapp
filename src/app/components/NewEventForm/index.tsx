@@ -12,6 +12,7 @@ import { Datepicker } from "flowbite-react";
 import { Label, TextInput, Button, Textarea } from "flowbite-react";
 import HttpService from "@/app/lib/prisma";
 import { Confirmation } from "../Confirmation";
+import { options } from "@/app/lib/gplaces";
 
 const instance = new HttpService();
 
@@ -56,11 +57,7 @@ export const NewEventForm = ({
   const inputRef = useRef(
     document.getElementById("autocomplete") as HTMLInputElement
   );
-  const options = {
-    componentRestrictions: { country: "us" },
-    fields: ["name", "formatted_address", "geometry"],
-    types: [],
-  };
+
   useEffect(() => {
     // Set the Ref to the autocomplete instance
     autoCompleteRef.current = new window.google.maps.places.Autocomplete(
@@ -134,8 +131,6 @@ export const NewEventForm = ({
             name="location"
             id="autocomplete"
             placeholder="Location"
-            required
-            type="text"
           />
         </div>
 

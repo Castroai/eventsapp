@@ -1,6 +1,8 @@
 import { prisma } from "@/app/lib/prisma";
 import { NextResponse } from "next/server";
 import { Event } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/auth";
 interface Coordinates {
   lat: number;
   long: number;
@@ -44,6 +46,83 @@ function deg2rad(deg: number): number {
 
 export async function POST(request: Request) {
   const data = await request.json();
-  const res = await findClosestEvents(data);
-  return NextResponse.json(res);
+  const items = await findClosestEvents(data);
+  let allItems;
+  const user = await getServerSession(authOptions);
+  if (user) {
+    const prismaUser = await prisma.user.findUnique({
+      where: {
+        email: user.user!.email!,
+      },
+      include: {
+        eventsAttending: {},
+      },
+    });
+    // All events that user is attending
+    const eventIdAttending = prismaUser!.eventsAttending.map((i) => i.eventId);
+    // create a new array, with a key in each object attending
+    allItems = items.map((item) => {
+      if (eventIdAttending.includes(item.id)) {
+        console.log(`found`);
+        return {
+          ...item,
+          attending: true,
+        };
+      } else {
+        return {
+          ...item,
+          attending: false,
+        };
+      }
+    });
+  } else {
+    allItems = items;
+  }
+
+  return NextResponse.json(allItems);
+}
+
+export async function GET(request: Request) {
+  let allItems;
+  // All Published Events
+  const items = await prisma.event.findMany({
+    where: {
+      status: {
+        equals: "PUBLISHED",
+      },
+    },
+  });
+  // Get the current user
+  const user = await getServerSession(authOptions);
+  console.log(user);
+  if (user) {
+    const prismaUser = await prisma.user.findUnique({
+      where: {
+        email: user.user!.email!,
+      },
+      include: {
+        eventsAttending: {},
+      },
+    });
+    // All events that user is attending
+    const eventIdAttending = prismaUser!.eventsAttending.map((i) => i.eventId);
+    // create a new array, with a key in each object attending
+    allItems = items.map((item) => {
+      if (eventIdAttending.includes(item.id)) {
+        console.log(`found`);
+        return {
+          ...item,
+          attending: true,
+        };
+      } else {
+        return {
+          ...item,
+          attending: false,
+        };
+      }
+    });
+  } else {
+    allItems = items;
+  }
+  return NextResponse.json(allItems);
 }

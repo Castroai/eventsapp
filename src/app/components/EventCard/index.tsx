@@ -8,14 +8,18 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
   const [res, setRes] = useState(i.attending);
   const attend = async (eventId: number) => {
     const { data } = await httpInstance.attendEvent({ eventId });
+    console.log();
     setRes(data.attending);
   };
+
+  const date = new Date(i.date);
 
   return (
     <div>
       <ul>
+        <li>ID: {i.id}</li>
         <li>Name: {i.eventName}</li>
-        <li> Date by : {i.date.toDateString()}</li>
+        <li> Date by : {date.toDateString()}</li>
         <li> STATUS : {i.status}</li>
         <Button disabled={res === undefined} onClick={() => attend(i.id)}>
           {res ? "Attending" : "Intrested"}
