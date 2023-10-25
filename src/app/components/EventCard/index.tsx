@@ -8,7 +8,6 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
   const [res, setRes] = useState(i.attending);
   const attend = async (eventId: number) => {
     const { data } = await httpInstance.attendEvent({ eventId });
-    console.log();
     setRes(data.attending);
   };
 

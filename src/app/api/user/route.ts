@@ -7,7 +7,6 @@ export async function PUT(request: Request) {
   const session = await getServerSession(authOptions);
   if (session && session.user && session.user.email) {
     const data = await request.json();
-    console.log(data.id);
     const user = await prisma.user.findUnique({
       where: {
         email: session.user.email,
