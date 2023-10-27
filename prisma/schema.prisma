@@ -66,6 +66,8 @@ enum UserRole {
 enum EventStatus {
   DRAFT
   PUBLISHED
+  CANCELED
+  POSTPONED
 }
 
 model Event {
@@ -80,6 +82,8 @@ model Event {
   organizer   User                   @relation(fields: [organizerId], references: [id])
   organizerId String
   users       UsersAttendingEvents[]
+  category    EventCategory?         @relation(fields: [categoryId], references: [id])
+  categoryId  Int?
 }
 
 model UsersAttendingEvents {
@@ -89,4 +93,11 @@ model UsersAttendingEvents {
   userId  String
 
   @@id([eventId, userId])
+}
+
+model EventCategory {
+  id   Int    @id @default(autoincrement())
+  name String
+
+  Event Event[]
 }

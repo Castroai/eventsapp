@@ -19,7 +19,7 @@ export default function DefaultNavbar() {
     <Navbar fluid rounded className="container mx-auto ">
       <Navbar.Brand as={Link} href="/">
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          My Dashboard
+          Events App
         </span>
       </Navbar.Brand>
       <Navbar.Toggle />
