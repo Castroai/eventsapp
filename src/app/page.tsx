@@ -19,7 +19,6 @@ export default function Home() {
             </div>
           );
         })}
-        {/* {JSON.stringify(results[0].date)} */}
       </div>
     </div>
   );

@@ -98,6 +98,5 @@ model UsersAttendingEvents {
 model EventCategory {
   id   Int    @id @default(autoincrement())
   name String
-
   Event Event[]
 }

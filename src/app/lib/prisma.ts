@@ -9,19 +9,15 @@ export default class HttpService {
       baseURL: "/api",
     })
   ) {}
-  public async createEvent(data: {
-    date: Date;
-    location: string;
-    eventName: string;
-    description: string;
-    status: string;
-    lat: number;
-    long: number;
-  }) {
-    return await this.instance.post("/event", data);
+  public async createEvent(data: FormData) {
+    return await this.instance.post("/event", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   }
   public async attendEvent({ eventId }: { eventId: number }) {
-    return await this.instance.put("/user", {
+    return await this.instance.put("/event/attend", {
       id: eventId,
     });
   }

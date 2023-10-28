@@ -1,7 +1,9 @@
 import { authOptions } from "@/app/lib/auth";
+import { uploadImage } from "@/app/lib/gstorage";
 import { prisma } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { z } from "zod";
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
@@ -11,11 +13,25 @@ export async function POST(request: Request) {
         email: session.user.email,
       },
     });
-    const data = await request.json();
+    const formData = await request.formData();
+    const date = formData.get("date") as string;
+    const eventName = formData.get("eventName") as string;
+    const location = formData.get("location") as string;
+    const description = formData.get("description") as string;
+    const lat = formData.get("lat") as string;
+    const long = formData.get("long") as string;
+    const file = formData.get("file") as File;
+    const upload = await uploadImage(file);
+    console.log(upload);
     const res = await prisma.event.create({
       data: {
-        organizerId: user?.id,
-        ...data,
+        organizerId: user!.id,
+        date,
+        description,
+        eventName,
+        lat: parseFloat(lat),
+        long: parseFloat(long),
+        location,
       },
     });
     return NextResponse.json(res);

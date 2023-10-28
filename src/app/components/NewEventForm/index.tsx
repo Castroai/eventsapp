@@ -22,7 +22,7 @@ export const NewEventForm = ({
   setOpenModal: Dispatch<SetStateAction<string | undefined>>;
 }) => {
   const initialValue = {
-    date: new Date(),
+    date: "",
     location: "",
     eventName: "",
     description: "",
@@ -30,6 +30,8 @@ export const NewEventForm = ({
     long: 0,
   };
   const [form, setForm] = useState(initialValue);
+  const [file, setFile] = useState<File | null>(null);
+
   const [successOrFail, setSuccessOrFail] = useState<"SUCCESS" | "FAIL" | null>(
     null
   );
@@ -37,7 +39,15 @@ export const NewEventForm = ({
   const submitHandler = async (e: FormEvent, status = "PUBLISHED") => {
     try {
       e.preventDefault();
-      await instance.createEvent({ ...form, status: status });
+      const formData = new FormData();
+      if (file) {
+        formData.set("file", file);
+      }
+      Object.keys(form).forEach((key) => {
+        // @ts-ignore
+        formData.append(key, form[key]);
+      });
+      await instance.createEvent(formData);
       setSuccessOrFail("SUCCESS");
     } catch (error) {
       setSuccessOrFail("FAIL");
@@ -101,6 +111,12 @@ export const NewEventForm = ({
     );
   }
 
+  const fileHandler = async (files: FileList | null) => {
+    if (files && files.length > 0) {
+      setFile(files[0]);
+    }
+  };
+
   return (
     <div>
       <form
@@ -108,6 +124,12 @@ export const NewEventForm = ({
         className="flex max-w-full w-full flex-col gap-4"
       >
         {/*  */}
+        <input
+          type="file"
+          onChange={(e) => {
+            fileHandler(e.target.files);
+          }}
+        />
         <div>
           <div className="mb-2 block">
             <Label htmlFor="eventName" value="Event Name" />
@@ -143,7 +165,11 @@ export const NewEventForm = ({
             name="date"
             title="Time & Date"
             onSelectedDateChanged={(date) => {
-              setForm((current) => ({ ...current, date: date }));
+              console.log(date);
+              setForm((current) => ({
+                ...current,
+                date: new Date(date).toISOString(),
+              }));
             }}
           />
         </div>
