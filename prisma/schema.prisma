@@ -84,7 +84,7 @@ model Event {
   users       UsersAttendingEvents[]
   category    EventCategory?         @relation(fields: [categoryId], references: [id])
   categoryId  Int?
-  imgUrl      String?
+  imgUrl      String?                @default("https://placehold.co/600x400.png")
 }
 
 model UsersAttendingEvents {

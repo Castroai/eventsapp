@@ -27,8 +27,9 @@ export const NewEventForm = ({
 }: {
   setOpenModal: Dispatch<SetStateAction<string | undefined>>;
 }) => {
+  const currentDate = new Date();
   const initialValue = {
-    date: "",
+    date: currentDate.toISOString(),
     location: "",
     eventName: "",
     description: "",
@@ -175,6 +176,7 @@ export const NewEventForm = ({
             id="date"
             name="date"
             title="Time & Date"
+            value={new Date(form.date).toDateString()}
             onSelectedDateChanged={(date) => {
               setForm((current) => ({
                 ...current,

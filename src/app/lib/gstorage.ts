@@ -12,7 +12,9 @@ const storage = new Storage({
 export async function uploadImage(file: File): Promise<string> {
   const bucketName = "event_images_dev";
   const bucket = storage.bucket(bucketName);
-  const blob = bucket.file(file.name);
+  const extension = path.extname(file.name);
+  const uniqueName = `${v4()}${extension}`;
+  const blob = bucket.file(uniqueName);
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
   const blobStream = blob.createWriteStream({
@@ -26,7 +28,7 @@ export async function uploadImage(file: File): Promise<string> {
     });
 
     blobStream.on("finish", () => {
-      const url = `https://storage.googleapis.com/${bucketName}/${file.name}`;
+      const url = `https://storage.googleapis.com/${bucketName}/${uniqueName}`;
       resolve(url);
     });
 

@@ -20,8 +20,12 @@ export async function POST(request: Request) {
     const description = formData.get("description") as string;
     const lat = formData.get("lat") as string;
     const long = formData.get("long") as string;
-    const file = formData.get("file") as File;
-    const uploadUrl = await uploadImage(file);
+    let uploadUrl: string | undefined;
+    if (formData.has("file")) {
+      const file = formData.get("file") as File;
+      uploadUrl = await uploadImage(file);
+    }
+
     const res = await prisma.event.create({
       data: {
         organizerId: user!.id,
