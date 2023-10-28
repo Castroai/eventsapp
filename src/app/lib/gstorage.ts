@@ -1,5 +1,6 @@
 import { Storage } from "@google-cloud/storage";
-
+import path from "path";
+import { v4 } from "uuid";
 const storage = new Storage({
   projectId: "",
   credentials: {
@@ -10,10 +11,7 @@ const storage = new Storage({
 
 export async function uploadImage(file: File): Promise<string> {
   const bucketName = "event_images_dev";
-  const destination = `images/${file.name}`;
-  //
   const bucket = storage.bucket(bucketName);
-  //
   const blob = bucket.file(file.name);
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
@@ -22,10 +20,16 @@ export async function uploadImage(file: File): Promise<string> {
       contentType: file.type,
     },
   });
-  blobStream.on("finish", () => {
-    console.log("Finished");
+  return new Promise((resolve, reject) => {
+    blobStream.on("error", (err) => {
+      reject(err);
+    });
+
+    blobStream.on("finish", () => {
+      const url = `https://storage.googleapis.com/${bucketName}/${file.name}`;
+      resolve(url);
+    });
+
+    blobStream.end(buffer); // Pass the buffer data to initiate upload
   });
-  blobStream.end(buffer);
-  const url = `https://storage.googleapis.com/${bucketName}/${destination}`;
-  return url;
 }

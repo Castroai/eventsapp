@@ -84,6 +84,7 @@ model Event {
   users       UsersAttendingEvents[]
   category    EventCategory?         @relation(fields: [categoryId], references: [id])
   categoryId  Int?
+  imgUrl      String?
 }
 
 model UsersAttendingEvents {
@@ -96,7 +97,7 @@ model UsersAttendingEvents {
 }
 
 model EventCategory {
-  id   Int    @id @default(autoincrement())
-  name String
+  id    Int     @id @default(autoincrement())
+  name  String
   Event Event[]
 }

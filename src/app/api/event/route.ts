@@ -21,8 +21,8 @@ export async function POST(request: Request) {
     const lat = formData.get("lat") as string;
     const long = formData.get("long") as string;
     const file = formData.get("file") as File;
-    const upload = await uploadImage(file);
-    console.log(upload);
+    const uploadUrl = await uploadImage(file);
+    console.log(uploadUrl);
     const res = await prisma.event.create({
       data: {
         organizerId: user!.id,
@@ -32,6 +32,7 @@ export async function POST(request: Request) {
         lat: parseFloat(lat),
         long: parseFloat(long),
         location,
+        imgUrl: uploadUrl,
       },
     });
     return NextResponse.json(res);
