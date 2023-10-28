@@ -8,8 +8,14 @@ import {
   useRef,
   useState,
 } from "react";
-import { Datepicker } from "flowbite-react";
-import { Label, TextInput, Button, Textarea } from "flowbite-react";
+import {
+  Label,
+  TextInput,
+  Button,
+  Textarea,
+  FileInput,
+  Datepicker,
+} from "flowbite-react";
 import HttpService from "@/app/lib/prisma";
 import { Confirmation } from "../Confirmation";
 import { options } from "@/app/lib/gplaces";
@@ -79,7 +85,7 @@ export const NewEventForm = ({
     // Add a listener
     autocomplete.addListener("place_changed", () => {
       const selectedPlace = autocomplete.getPlace();
-      console.log(selectedPlace);
+
       if (selectedPlace.geometry) {
         const lat = selectedPlace.geometry.location?.lat;
         const long = selectedPlace.geometry.location?.lng;
@@ -123,13 +129,18 @@ export const NewEventForm = ({
         onSubmit={submitHandler}
         className="flex max-w-full w-full flex-col gap-4"
       >
-        {/*  */}
-        <input
-          type="file"
-          onChange={(e) => {
-            fileHandler(e.target.files);
-          }}
-        />
+        <div className="max-w-md" id="fileUpload">
+          <div className="mb-2 block">
+            <Label htmlFor="file" value="Upload file" />
+          </div>
+          <FileInput
+            helperText="A  picture to show in the card for your guests 200X200"
+            id="file"
+            onChange={(e) => {
+              fileHandler(e.target.files);
+            }}
+          />
+        </div>
         <div>
           <div className="mb-2 block">
             <Label htmlFor="eventName" value="Event Name" />
@@ -165,7 +176,6 @@ export const NewEventForm = ({
             name="date"
             title="Time & Date"
             onSelectedDateChanged={(date) => {
-              console.log(date);
               setForm((current) => ({
                 ...current,
                 date: new Date(date).toISOString(),

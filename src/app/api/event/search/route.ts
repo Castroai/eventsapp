@@ -63,7 +63,6 @@ export async function POST(request: Request) {
     // create a new array, with a key in each object attending
     allItems = items.map((item) => {
       if (eventIdAttending.includes(item.id)) {
-        console.log(`found`);
         return {
           ...item,
           attending: true,
@@ -94,7 +93,6 @@ export async function GET(request: Request) {
   });
   // Get the current user
   const user = await getServerSession(authOptions);
-  console.log(user);
   if (user) {
     const prismaUser = await prisma.user.findUnique({
       where: {
@@ -109,7 +107,6 @@ export async function GET(request: Request) {
     // create a new array, with a key in each object attending
     allItems = items.map((item) => {
       if (eventIdAttending.includes(item.id)) {
-        console.log(`found`);
         return {
           ...item,
           attending: true,

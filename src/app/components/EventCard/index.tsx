@@ -15,16 +15,16 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
   const date = new Date(i.date);
 
   return (
-    <Card
-      renderImage={() => (
+    <Card className="h-96">
+      <div className="relative h-48 w-full">
         <Image
           src={i.imgUrl!}
-          width={500}
-          height={500}
+          layout="fill"
+          objectFit="cover"
           alt="Picture of the author"
+          priority
         />
-      )}
-    >
+      </div>
       <h5 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         {i.eventName}
       </h5>

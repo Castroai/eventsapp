@@ -22,7 +22,6 @@ export async function POST(request: Request) {
     const long = formData.get("long") as string;
     const file = formData.get("file") as File;
     const uploadUrl = await uploadImage(file);
-    console.log(uploadUrl);
     const res = await prisma.event.create({
       data: {
         organizerId: user!.id,

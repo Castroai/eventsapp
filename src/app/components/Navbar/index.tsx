@@ -1,5 +1,5 @@
 "use client";
-import { Button, Navbar } from "flowbite-react";
+import { Button, DarkThemeToggle, Navbar } from "flowbite-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -15,13 +15,14 @@ export default function DefaultNavbar() {
   const { data: session, status } = useSession();
 
   return (
-    <Navbar fluid rounded>
+    <Navbar fluid>
       <Navbar.Brand as={Link} href="/">
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
           Events App
         </span>
       </Navbar.Brand>
       <div className="flex md:order-2">
+        <DarkThemeToggle />
         {status === "authenticated" ? (
           <Button onClick={() => signOut()}>Sign out</Button>
         ) : (

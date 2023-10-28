@@ -34,7 +34,6 @@ export const SearchComponent = () => {
     // Add a listener
     autocomplete.addListener("place_changed", () => {
       const selectedPlace = autocomplete.getPlace();
-      console.log(selectedPlace);
       if (selectedPlace.geometry) {
         const lat = selectedPlace.geometry.location?.lat;
         const long = selectedPlace.geometry.location?.lng;

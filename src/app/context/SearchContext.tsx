@@ -4,6 +4,7 @@ import { useSearchHook } from "../hooks/SearchHook";
 import { Event } from "@prisma/client";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { Spinner } from "flowbite-react";
+import { Flowbite } from "flowbite-react";
 
 interface ContextInterface {
   results: Event[];
@@ -29,12 +30,14 @@ export const SearchWrapper = ({ children }: { children: ReactNode }) => {
         searchEvents,
       }}
     >
-      <Wrapper
-        apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-        libraries={["places"]}
-      >
-        {children}
-      </Wrapper>
+      <Flowbite>
+        <Wrapper
+          apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+          libraries={["places"]}
+        >
+          {children}
+        </Wrapper>
+      </Flowbite>
     </Context.Provider>
   );
 };
