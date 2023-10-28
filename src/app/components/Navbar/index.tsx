@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useSession, signIn, signOut } from "next-auth/react";
 const NavLink = ({ pathName, label }: { pathName: string; label: string }) => {
   const path = usePathname();
-
   return (
     <Navbar.Link href={pathName} active={path === pathName}>
       {label}
@@ -16,21 +15,22 @@ export default function DefaultNavbar() {
   const { data: session, status } = useSession();
 
   return (
-    <Navbar fluid rounded className="container mx-auto ">
+    <Navbar fluid rounded>
       <Navbar.Brand as={Link} href="/">
         <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
           Events App
         </span>
       </Navbar.Brand>
-      <Navbar.Toggle />
-      <Navbar.Collapse className="items-center flex h-full">
-        <NavLink label="Home" pathName="/" />
-        <NavLink label="Dashboard" pathName="/dashboard" />
+      <div className="flex md:order-2">
         {status === "authenticated" ? (
           <Button onClick={() => signOut()}>Sign out</Button>
         ) : (
           <Button onClick={() => signIn()}>Sign in</Button>
         )}
+        <Navbar.Toggle />
+      </div>
+      <Navbar.Collapse className="items-center flex h-full">
+        <NavLink label="Host an event" pathName="/dashboard" />
       </Navbar.Collapse>
     </Navbar>
   );

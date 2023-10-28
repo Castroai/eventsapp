@@ -3,6 +3,8 @@ import { ReactNode, createContext, useContext, useEffect } from "react";
 import { useSearchHook } from "../hooks/SearchHook";
 import { Event } from "@prisma/client";
 import { Wrapper } from "@googlemaps/react-wrapper";
+import { Spinner } from "flowbite-react";
+
 interface ContextInterface {
   results: Event[];
   searchEvents: ({ lat, long }: { lat: number; long: number }) => Promise<void>;
@@ -13,7 +15,11 @@ export const SearchWrapper = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {}, []);
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Spinner aria-label="Default status example" size="xl" />
+      </div>
+    );
   }
 
   return (
