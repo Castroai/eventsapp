@@ -48,6 +48,13 @@ model User {
   sessions        Session[]
   events          Event[]
   eventsAttending UsersAttendingEvents[]
+  StripeAccount   StripeAccount?         @relation(fields: [stripeAccountId], references: [id])
+  stripeAccountId String?
+}
+
+model StripeAccount {
+  id   String @unique
+  User User[]
 }
 
 model VerificationToken {
