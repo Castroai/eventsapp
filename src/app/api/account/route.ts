@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     if (prismaUser && prismaUser.stripeAccountId) {
       const accountLink = await stripe.accountLinks.create({
         account: prismaUser.stripeAccountId,
-        refresh_url: "https://example.com/reauth",
+        refresh_url: `${baseUrl}/dashboard/account`,
         return_url: `${baseUrl}/dashboard/account`,
         type: "account_onboarding",
       });
@@ -43,8 +43,8 @@ export async function POST(request: Request) {
       });
       const accountLink = await stripe.accountLinks.create({
         account: account.id,
-        refresh_url: "https://example.com/reauth",
-        return_url: "http://localhost:3000/dashboard/account",
+        refresh_url: `${baseUrl}/dashboard/account`,
+        return_url: `${baseUrl}/dashboard/account`,
         type: "account_onboarding",
       });
       console.log("ACCOUNTLINK", accountLink);
