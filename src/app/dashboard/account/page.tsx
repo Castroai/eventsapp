@@ -9,11 +9,6 @@ import Stripe from "stripe";
 
 export default function AccountPage() {
   const router = useRouter();
-  const session = useSession();
-  const user = session.data?.user;
-  if (user) {
-    console.log(user);
-  }
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<Stripe.Account>();
   const fetchStatus = async () => {
