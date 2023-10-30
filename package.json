@@ -16,6 +16,7 @@
     "@prisma/client": "^5.5.2",
     "@types/google.maps": "^3.54.5",
     "@types/uuid": "^9.0.6",
+    "@vercel/postgres": "^0.5.0",
     "axios": "^1.5.1",
     "flowbite-react": "^0.6.4",
     "next": "13.5.6",
