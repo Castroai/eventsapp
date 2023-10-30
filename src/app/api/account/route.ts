@@ -11,40 +11,42 @@ const stripe = require("stripe")(
 
 export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
-  if (session && session.user && session.user.email) {
-    const user = await prisma.user.findUnique({
+  if (session && session.user) {
+    const prismaUser = await prisma.user.findUnique({
       where: {
-        email: session.user.email,
-      },
-      include: {
-        StripeAccount: {},
+        id: session.user.id,
       },
     });
-    if (user && user.StripeAccount) {
-      console.log("User already has account");
-      return NextResponse.error();
-    }
-    const account = await stripe.accounts.create({
-      type: "standard",
-    });
-    await prisma.user.update({
-      where: {
-        email: session.user.email,
-      },
-      data: {
-        stripeAccountId: {
-          set: account.id,
+    if (prismaUser && prismaUser.stripeAccountId) {
+      const accountLink = await stripe.accountLinks.create({
+        account: prismaUser.stripeAccountId,
+        refresh_url: "https://example.com/reauth",
+        return_url: "http://localhost:3000/dashboard/account",
+        type: "account_onboarding",
+      });
+      console.log("ACCOUNTLINK", accountLink);
+      return NextResponse.json(accountLink);
+    } else {
+      const account = await stripe.accounts.create({
+        type: "standard",
+      });
+      await prisma.user.update({
+        where: {
+          id: session.user.id,
         },
-      },
-    });
-    const accountLink = await stripe.accountLinks.create({
-      account: "acct_1O6MdLGf4M12Rncx",
-      refresh_url: "https://example.com/reauth",
-      return_url: "http://localhost:3000/dashboard/account",
-      type: "account_onboarding",
-    });
-    console.log("ACCOUNTLINK", accountLink);
-    return NextResponse.json(accountLink);
+        data: {
+          stripeAccountId: account.id,
+        },
+      });
+      const accountLink = await stripe.accountLinks.create({
+        account: account.id,
+        refresh_url: "https://example.com/reauth",
+        return_url: "http://localhost:3000/dashboard/account",
+        type: "account_onboarding",
+      });
+      console.log("ACCOUNTLINK", accountLink);
+      return NextResponse.json(accountLink);
+    }
   } else {
     return NextResponse.error();
   }

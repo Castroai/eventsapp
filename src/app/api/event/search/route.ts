@@ -48,11 +48,11 @@ export async function POST(request: Request) {
   const data = await request.json();
   const items = await findClosestEvents(data);
   let allItems;
-  const user = await getServerSession(authOptions);
-  if (user) {
+  const session = await getServerSession(authOptions);
+  if (session && session.user) {
     const prismaUser = await prisma.user.findUnique({
       where: {
-        email: user.user!.email!,
+        id: session.user.id,
       },
       include: {
         eventsAttending: {},
@@ -92,11 +92,11 @@ export async function GET(request: Request) {
     },
   });
   // Get the current user
-  const user = await getServerSession(authOptions);
-  if (user) {
+  const session = await getServerSession(authOptions);
+  if (session && session.user) {
     const prismaUser = await prisma.user.findUnique({
       where: {
-        email: user.user!.email!,
+        id: session.user.id,
       },
       include: {
         eventsAttending: {},

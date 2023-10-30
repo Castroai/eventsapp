@@ -16,4 +16,18 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   session: { strategy: "jwt" },
+
+  callbacks: {
+    async jwt({ token }) {
+      return token;
+    },
+    session: async ({ session, token }) => {
+      if (session?.user) {
+        // @ts-ignore
+        // TODO:Fix this type
+        session.user.id = token.sub;
+      }
+      return session;
+    },
+  },
 };
