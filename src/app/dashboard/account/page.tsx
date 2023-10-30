@@ -45,13 +45,13 @@ export default function AccountPage() {
           <div>
             <p className="text-lg">Setup Stripe Account</p>
             <p className="text-sm">
-              In order to receive payments from your ticket sales, you'll need
+              In order to receive payments from your ticket sales, you will need
               to set up an account with stripe our payment processor.
             </p>
           </div>
           <div>
-            Current Status of "details_submitted" :
-            {status && JSON.stringify(status.details_submitted)}
+            <p> Current Status of details_submitted :</p>
+            <p>{status && JSON.stringify(status.details_submitted)}</p>
           </div>
           <form onSubmit={submitHandler}>
             <Button type="submit">Create Stripe Account</Button>
