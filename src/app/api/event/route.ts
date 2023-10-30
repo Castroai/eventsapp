@@ -1,6 +1,6 @@
 import { authOptions } from "@/app/lib/auth";
+import prisma from "@/app/lib/db";
 import { uploadImage } from "@/app/lib/gstorage";
-import { prisma } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 import { z } from "zod";

@@ -16,7 +16,7 @@ import {
   FileInput,
   Datepicker,
 } from "flowbite-react";
-import HttpService from "@/app/lib/prisma";
+import HttpService from "@/app/lib/httpservice";
 import { Confirmation } from "../Confirmation";
 import { options } from "@/app/lib/gplaces";
 

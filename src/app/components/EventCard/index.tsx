@@ -1,5 +1,5 @@
 "use client";
-import HttpService from "@/app/lib/prisma";
+import HttpService from "@/app/lib/httpservice";
 import { Event } from "@prisma/client";
 import { Button, Card } from "flowbite-react";
 import Image from "next/image";

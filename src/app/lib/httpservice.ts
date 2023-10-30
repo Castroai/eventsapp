@@ -1,7 +1,4 @@
-import { PrismaClient } from "@prisma/client";
 import axios from "axios";
-
-export const prisma = new PrismaClient();
 
 export default class HttpService {
   constructor(

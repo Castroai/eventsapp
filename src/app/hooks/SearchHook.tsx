@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Event } from "@prisma/client";
-import HttpService from "../lib/prisma";
+import HttpService from "../lib/httpservice";
 const service = new HttpService();
 export const useSearchHook = () => {
   const [results, setResults] = useState<Event[]>([]);
