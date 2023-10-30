@@ -1,6 +1,6 @@
 // Set your secret key. Remember to switch to your live secret key in production.
 import { authOptions } from "@/app/lib/auth";
-import { prisma } from "@/app/lib/prisma";
+import prisma from "@/app/lib/db";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
