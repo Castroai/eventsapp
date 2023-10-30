@@ -1,8 +1,10 @@
 import { authOptions } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
 import { uploadImage } from "@/app/lib/gstorage";
+import { stripe } from "@/app/lib/stripe";
 import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import Stripe from "stripe";
 import { z } from "zod";
 
 export async function POST(request: Request) {
@@ -26,6 +28,17 @@ export async function POST(request: Request) {
       uploadUrl = await uploadImage(file);
     }
 
+    if (user && user.stripeAccountId) {
+      const newStripeProduct = await stripe({
+        stripeAccount: user.stripeAccountId,
+      }).products.create({
+        name: eventName,
+        images: uploadUrl ? [uploadUrl] : undefined,
+        type: "service",
+        shippable: false,
+      });
+      console.log(newStripeProduct);
+    }
     const res = await prisma.event.create({
       data: {
         organizerId: user!.id,
