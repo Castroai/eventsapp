@@ -53,9 +53,12 @@ export default function Dashboard() {
             </Table.Head>
             <Table.Body className="divide-y">
               {results &&
-                results.map((re) => {
+                results.map((re, index) => {
                   return (
-                    <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <Table.Row
+                      key={index}
+                      className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                    >
                       <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                         {re.eventName}
                       </Table.Cell>
