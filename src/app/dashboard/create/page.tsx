@@ -13,13 +13,17 @@ import HttpService from "@/app/lib/httpservice";
 import { options } from "@/app/lib/gplaces";
 import { Confirmation } from "@/app/components/Confirmation";
 import { ToggleSwitch } from "flowbite-react";
-import { TicketComponent } from "@/app/api/SellTicketsFormComponent";
+import { TicketComponent } from "@/app/components/SellTicketsFormComponent";
 
 const instance = new HttpService();
 
 const CreateEventPage = () => {
+  const defaultTicketState = {
+    price: 0,
+    quantity: 0,
+  };
   const [sellTickets, setSellTickets] = useState(false);
-  const [ticketState, setTicketState] = useState();
+  const [ticketState, setTicketState] = useState(defaultTicketState);
   const currentDate = new Date();
   const initialValue = {
     date: currentDate.toISOString(),
@@ -48,6 +52,10 @@ const CreateEventPage = () => {
         // @ts-ignore
         formData.append(key, form[key]);
       });
+      if (ticketState.price > 0 && ticketState.quantity > 0) {
+        formData.append("ticketPrice", ticketState.price.toString());
+        formData.append("ticketQuantity", ticketState.quantity.toString());
+      }
       await instance.createEvent(formData);
       setSuccessOrFail("SUCCESS");
     } catch (error) {

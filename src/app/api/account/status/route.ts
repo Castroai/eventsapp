@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       );
       return NextResponse.json(status);
     } else {
-      return NextResponse.error();
+      return NextResponse.json(null);
     }
   } else {
     return NextResponse.error();
