@@ -2,12 +2,12 @@
 import DefaultNavbar from "./components/Navbar";
 import { EventCard } from "./components/EventCard";
 import { SearchComponent } from "./components/SearchComponent";
-import { WithSearch } from "./context/SearchContext";
+import { WithData } from "./context/DataContext";
 import DefaultFooter from "./components/Footer";
 import { useEffect } from "react";
 
 export default function Home() {
-  const { results, fetchAllEvents } = WithSearch();
+  const { results, fetchAllEvents } = WithData();
   useEffect(() => {
     fetchAllEvents();
   }, []);

@@ -1,36 +1,26 @@
 "use client";
-import axios from "axios";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/app/components/DashboardLayout";
 import { Button, Card } from "flowbite-react";
-import Stripe from "stripe";
+import { WithData } from "@/app/context/DataContext";
+import HttpService from "@/app/lib/httpservice";
+
+const instance = new HttpService();
 
 export default function AccountPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState<Stripe.Account>();
-  const fetchStatus = async () => {
-    setLoading(true);
-    const { data } = await axios.get("/api/account/status");
-    setStatus(data);
-    setLoading(false);
-    return;
-  };
+  const { stripeStatus, fetchStatus } = WithData();
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-    const { data } = await axios.post("/api/account");
+    const { data } = await instance.accountCreate();
     router.push(data.url);
   };
 
   useEffect(() => {
     fetchStatus();
   }, []);
-
-  if (loading) {
-    return <div>Loading....</div>;
-  }
 
   return (
     <DashboardLayout>
@@ -45,7 +35,9 @@ export default function AccountPage() {
           </div>
           <div>
             <p> Current Status of details_submitted :</p>
-            <p>{status && JSON.stringify(status.details_submitted)}</p>
+            <p>
+              {stripeStatus && JSON.stringify(stripeStatus.details_submitted)}
+            </p>
           </div>
           <form onSubmit={submitHandler}>
             <Button type="submit">Create Stripe Account</Button>

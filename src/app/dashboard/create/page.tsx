@@ -12,11 +12,14 @@ import {
 import HttpService from "@/app/lib/httpservice";
 import { options } from "@/app/lib/gplaces";
 import { Confirmation } from "@/app/components/Confirmation";
-import CurrencyInput from "react-currency-input-field";
+import { ToggleSwitch } from "flowbite-react";
+import { TicketComponent } from "@/app/api/SellTicketsFormComponent";
 
 const instance = new HttpService();
 
 const CreateEventPage = () => {
+  const [sellTickets, setSellTickets] = useState(false);
+  const [ticketState, setTicketState] = useState();
   const currentDate = new Date();
   const initialValue = {
     date: currentDate.toISOString(),
@@ -190,19 +193,18 @@ const CreateEventPage = () => {
               />
             </div>
             <div>
-              <div className="mb-2 block">
-                <Label htmlFor="price" value="Price" />
-              </div>
-              <CurrencyInput
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                id="price"
-                name="price"
-                placeholder="Please enter a price"
-                defaultValue={0.0}
-                decimalsLimit={2}
-                onValueChange={(value, name) => console.log(value, name)}
+              <ToggleSwitch
+                checked={sellTickets}
+                label="Sell tickets"
+                onChange={setSellTickets}
               />
             </div>
+            {sellTickets && (
+              <TicketComponent
+                setTicketState={setTicketState}
+                ticketState={ticketState}
+              />
+            )}
             <div className="flex gap-4">
               <Button className="flex w-full" type="submit">
                 Submit

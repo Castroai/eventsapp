@@ -1,14 +1,13 @@
 "use client";
-// @ts-ignore
 import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
 import { Button, Card } from "flowbite-react";
-import { WithSearch } from "../context/SearchContext";
+import { WithData } from "../context/DataContext";
 import { Table } from "flowbite-react";
 import Link from "next/link";
 
 export default function Dashboard() {
-  const { results, fetchAllEvents } = WithSearch();
+  const { results, fetchAllEvents } = WithData();
   useEffect(() => {
     fetchAllEvents({
       user: "me",

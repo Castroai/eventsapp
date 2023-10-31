@@ -1,9 +1,10 @@
 "use client";
 import { ReactNode, createContext, useContext } from "react";
-import { useSearchHook } from "../hooks/SearchHook";
+import { useDataHook } from "../hooks/DataHook";
 import { Event } from "@prisma/client";
 import { Wrapper } from "@googlemaps/react-wrapper";
 import { Flowbite } from "flowbite-react";
+import Stripe from "stripe";
 
 interface ContextInterface {
   results: Event[];
@@ -16,10 +17,19 @@ interface ContextInterface {
       | undefined
   ) => Promise<void>;
   loading: boolean;
+  fetchStatus: () => Promise<void>;
+  stripeStatus: Stripe.Account | undefined;
 }
 const Context = createContext<ContextInterface>({} as ContextInterface);
-export const SearchWrapper = ({ children }: { children: ReactNode }) => {
-  const { results, searchEvents, loading, fetchAllEvents } = useSearchHook();
+export const DataWrapper = ({ children }: { children: ReactNode }) => {
+  const {
+    results,
+    searchEvents,
+    loading,
+    fetchAllEvents,
+    fetchStatus,
+    stripeStatus,
+  } = useDataHook();
 
   return (
     <Context.Provider
@@ -28,6 +38,8 @@ export const SearchWrapper = ({ children }: { children: ReactNode }) => {
         searchEvents,
         fetchAllEvents,
         loading,
+        fetchStatus,
+        stripeStatus,
       }}
     >
       <Flowbite>
@@ -42,4 +54,4 @@ export const SearchWrapper = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const WithSearch = () => useContext(Context);
+export const WithData = () => useContext(Context);

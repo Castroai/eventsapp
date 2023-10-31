@@ -1,11 +1,11 @@
 "use client";
-import { WithSearch } from "@/app/context/SearchContext";
+import { WithData } from "@/app/context/DataContext";
 import { options } from "@/app/lib/gplaces";
 import { Button, TextInput } from "flowbite-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
 export const SearchComponent = () => {
-  const { searchEvents } = WithSearch();
+  const { searchEvents } = WithData();
   const [coords, setCoords] = useState({
     lat: 0,
     long: 0,

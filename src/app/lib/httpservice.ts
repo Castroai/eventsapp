@@ -29,4 +29,10 @@ export default class HttpService {
       params,
     });
   }
+  public async accountStatus() {
+    return await this.instance.get("/account/status");
+  }
+  public async accountCreate() {
+    return await this.instance.post("/account");
+  }
 }

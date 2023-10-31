@@ -39,6 +39,14 @@ export async function POST(request: Request) {
       });
       console.log(newStripeProduct);
     }
+    const createSlug = (name: string) => {
+      // Convert the name to lowercase and replace spaces with hyphens
+      const slug = name.toLowerCase().replace(/\s+/g, "-");
+      return slug;
+    };
+    const slug = createSlug(eventName);
+
+    console.log(slug);
     const res = await prisma.event.create({
       data: {
         organizerId: user!.id,

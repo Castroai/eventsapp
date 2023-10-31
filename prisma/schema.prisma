@@ -50,6 +50,7 @@ model User {
   events          Event[]
   eventsAttending UsersAttendingEvents[]
   stripeAccountId String?
+  tickets         TicketUser[]
 }
 
 model VerificationToken {
@@ -87,6 +88,18 @@ model Event {
   category    EventCategory?         @relation(fields: [categoryId], references: [id])
   categoryId  Int?
   imgUrl      String?                @default("https://placehold.co/600x400.png")
+  slug        String                 @unique
+  tickets     Ticket[]
+}
+
+model Ticket {
+  id       Int          @id @default(autoincrement())
+  eventId  Int
+  event    Event        @relation(fields: [eventId], references: [id])
+  price    Float
+  quantity Int
+  users    TicketUser[]
+  // You can add more fields to represent ticket types, availability, etc.
 }
 
 model UsersAttendingEvents {
@@ -96,6 +109,15 @@ model UsersAttendingEvents {
   userId  String
 
   @@id([eventId, userId])
+}
+
+model TicketUser {
+  id       Int    @id @default(autoincrement())
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  ticketId Int
+  ticket   Ticket @relation(fields: [ticketId], references: [id])
+  // You can add more fields to represent additional information about the ticket user relationship
 }
 
 model EventCategory {
