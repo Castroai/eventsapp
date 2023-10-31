@@ -2,14 +2,12 @@
 // @ts-ignore
 import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
-import { NewEventForm } from "../components/NewEventForm";
-import { Button, Card, Modal } from "flowbite-react";
+import { Button, Card } from "flowbite-react";
 import { WithSearch } from "../context/SearchContext";
 import { Table } from "flowbite-react";
+import Link from "next/link";
 
 export default function Dashboard() {
-  const [openModal, setOpenModal] = useState<string | undefined>();
-  const props = { openModal, setOpenModal };
   const { results, fetchAllEvents } = WithSearch();
   useEffect(() => {
     fetchAllEvents({
@@ -23,22 +21,13 @@ export default function Dashboard() {
           <div className="flex flex-col gap-2">
             <h1 className="text-md">Start Selling Tickets today</h1>
             <div>
-              <Button onClick={() => props.setOpenModal("default")}>
-                Create New Event
-              </Button>
+              <Link href={"/dashboard/create"}>
+                <Button>Create New Event</Button>
+              </Link>
             </div>
           </div>
         </Card>
 
-        <Modal
-          show={props.openModal === "default"}
-          onClose={() => props.setOpenModal(undefined)}
-        >
-          <Modal.Header>Create New Event</Modal.Header>
-          <Modal.Body>
-            <NewEventForm setOpenModal={setOpenModal} />
-          </Modal.Body>
-        </Modal>
         {/*  */}
         <Card>
           <Table striped>
