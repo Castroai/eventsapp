@@ -49,6 +49,7 @@ export async function POST(request: Request) {
   const items = await findClosestEvents(data);
   let allItems;
   const session = await getServerSession(authOptions);
+
   if (session && session.user) {
     const prismaUser = await prisma.user.findUnique({
       where: {
@@ -107,8 +108,21 @@ export async function GET(request: NextRequest, context: unknown) {
           },
         },
       },
+      include: {
+        users: {
+          select: {
+            userId: true,
+          },
+        },
+      },
     });
-    return NextResponse.json(res);
+    const eventsWithLikesCount = res.map((event) => {
+      return {
+        ...event,
+        numberOfLikes: event.users.length,
+      };
+    });
+    return NextResponse.json(eventsWithLikesCount);
   }
   // All Published Events
   const items = await prisma.event.findMany(findRequest);

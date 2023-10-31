@@ -1,5 +1,5 @@
 "use client";
-
+// @ts-ignore
 import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
 import { NewEventForm } from "../components/NewEventForm";
@@ -10,7 +10,7 @@ import { Table } from "flowbite-react";
 export default function Dashboard() {
   const [openModal, setOpenModal] = useState<string | undefined>();
   const props = { openModal, setOpenModal };
-  const { results, searchEvents, fetchAllEvents } = WithSearch();
+  const { results, fetchAllEvents } = WithSearch();
   useEffect(() => {
     fetchAllEvents({
       user: "me",
@@ -45,7 +45,7 @@ export default function Dashboard() {
             <Table.Head>
               <Table.HeadCell>Event Name</Table.HeadCell>
               <Table.HeadCell>Date</Table.HeadCell>
-              <Table.HeadCell>Intrested</Table.HeadCell>
+              <Table.HeadCell>Likes</Table.HeadCell>
               <Table.HeadCell>Price</Table.HeadCell>
               <Table.HeadCell>
                 <span className="sr-only">Edit</span>
@@ -65,7 +65,8 @@ export default function Dashboard() {
                       <Table.Cell>
                         {new Date(re.date).toDateString()}
                       </Table.Cell>
-                      <Table.Cell>5</Table.Cell>
+                      {/* TODO: Fix re.numberOfLikes types */}
+                      <Table.Cell>3</Table.Cell>
                       <Table.Cell>$29.99</Table.Cell>
                       <Table.Cell>
                         <a

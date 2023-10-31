@@ -4,6 +4,7 @@ import { Event } from "@prisma/client";
 import { Button, Card } from "flowbite-react";
 import Image from "next/image";
 import { useState } from "react";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
 const httpInstance = new HttpService();
 export const EventCard = (i: Event & { attending?: boolean }) => {
   const [res, setRes] = useState(i.attending);
@@ -31,9 +32,11 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
       <p className="font-normal text-gray-700 dark:text-gray-400">
         {date.toDateString()} | {i.location}
       </p>
-      <Button disabled={res === undefined} onClick={() => attend(i.id)}>
-        {res ? "Attending" : "Intrested"}
-      </Button>
+      <div>
+        <button disabled={res === undefined} onClick={() => attend(i.id)}>
+          {res ? <AiFillHeart /> : <AiOutlineHeart />}
+        </button>
+      </div>
     </Card>
   );
 };
