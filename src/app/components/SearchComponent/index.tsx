@@ -5,7 +5,7 @@ import { Button, TextInput } from "flowbite-react";
 import { FormEvent, useEffect, useRef, useState } from "react";
 
 export const SearchComponent = () => {
-  const { searchEvents, results } = WithSearch();
+  const { searchEvents } = WithSearch();
   const [coords, setCoords] = useState({
     lat: 0,
     long: 0,

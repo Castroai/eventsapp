@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
-import { Event } from "@prisma/client";
+import { NextRequest, NextResponse } from "next/server";
+import { Event, Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
@@ -81,18 +81,38 @@ export async function POST(request: Request) {
   return NextResponse.json(allItems);
 }
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest, context: unknown) {
   let allItems;
-  // All Published Events
-  const items = await prisma.event.findMany({
+  const session = await getServerSession(authOptions);
+  const params = request.nextUrl.searchParams;
+  const findRequest: Prisma.EventFindManyArgs = {
     where: {
       status: {
         equals: "PUBLISHED",
       },
     },
-  });
+  };
+  if (
+    params.has("user") &&
+    params.get("user") === "me" &&
+    session &&
+    session.user
+  ) {
+    const res = await prisma.event.findMany({
+      where: {
+        ...findRequest.where,
+        AND: {
+          organizerId: {
+            equals: session.user.id,
+          },
+        },
+      },
+    });
+    return NextResponse.json(res);
+  }
+  // All Published Events
+  const items = await prisma.event.findMany(findRequest);
   // Get the current user
-  const session = await getServerSession(authOptions);
   if (session && session.user) {
     const prismaUser = await prisma.user.findUnique({
       where: {

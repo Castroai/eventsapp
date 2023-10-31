@@ -24,7 +24,9 @@ export default class HttpService {
       long: long,
     });
   }
-  public async allEvents() {
-    return await this.instance.get("/event/search");
+  public async allEvents(params?: { user: string }) {
+    return await this.instance.get("/event/search", {
+      params,
+    });
   }
 }

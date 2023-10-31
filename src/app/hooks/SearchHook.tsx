@@ -4,7 +4,7 @@ import HttpService from "../lib/httpservice";
 const service = new HttpService();
 export const useSearchHook = () => {
   const [results, setResults] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const searchEvents = async ({ lat, long }: { lat: number; long: number }) => {
     setLoading(true);
@@ -12,19 +12,17 @@ export const useSearchHook = () => {
     setResults(data);
     setLoading(false);
   };
-  const fetchAllEvents = async () => {
+  const fetchAllEvents = async (params?: { user: string }) => {
     setLoading(true);
-
-    const { data } = await service.allEvents();
+    const { data } = await service.allEvents(params);
     setResults(data);
     setLoading(false);
   };
-  useEffect(() => {
-    fetchAllEvents();
-  }, []);
+
   return {
     results,
     searchEvents,
+    fetchAllEvents,
     loading,
   };
 };

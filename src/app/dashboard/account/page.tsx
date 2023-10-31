@@ -4,7 +4,6 @@ import { FormEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/app/components/DashboardLayout";
 import { Button, Card } from "flowbite-react";
-import { useSession } from "next-auth/react";
 import Stripe from "stripe";
 
 export default function AccountPage() {

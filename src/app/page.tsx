@@ -4,10 +4,13 @@ import { EventCard } from "./components/EventCard";
 import { SearchComponent } from "./components/SearchComponent";
 import { WithSearch } from "./context/SearchContext";
 import DefaultFooter from "./components/Footer";
-import { Flowbite } from "flowbite-react";
+import { useEffect } from "react";
 
 export default function Home() {
-  const { results } = WithSearch();
+  const { results, fetchAllEvents } = WithSearch();
+  useEffect(() => {
+    fetchAllEvents();
+  }, []);
   return (
     <div className="flex flex-col gap-5 h-full justify-between dark:bg-current">
       <header>
