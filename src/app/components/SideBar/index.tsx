@@ -14,14 +14,7 @@ export default function SideBar() {
             label="Events"
             renderChevronIcon={(theme, open) => {
               const IconComponent = open ? HiOutlineMinusSm : HiOutlinePlusSm;
-              return (
-                <IconComponent
-                  aria-hidden
-                  className={twMerge(
-                    theme.label.icon.open[open ? "on" : "off"]
-                  )}
-                />
-              );
+              return <IconComponent aria-hidden />;
             }}
           >
             <Sidebar.Item href="/dashboard/create/">Create Event</Sidebar.Item>
