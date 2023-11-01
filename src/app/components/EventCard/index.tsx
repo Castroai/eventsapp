@@ -1,32 +1,22 @@
-"use client";
-import HttpService from "@/app/lib/httpservice";
 import { Event } from "@prisma/client";
-import { Button, Card } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-const httpInstance = new HttpService();
-export const EventCard = (i: Event & { attending?: boolean }) => {
-  const [res, setRes] = useState(i.attending);
-  const attend = async (eventId: number) => {
-    const { data } = await httpInstance.attendEvent({ eventId });
-    setRes(data.attending);
-  };
 
+export const EventCard = (i: Event & { attending?: boolean }) => {
   const date = new Date(i.date);
 
   return (
     <Link
       href={`/events/${i.slug}`}
-      className="hover:cursor-pointer hover:shadow-xl hover:shadow-gray-100"
+      className="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
     >
-      <Card className="h-96" onClick={() => {}}>
+      <div className="h-96">
         <div className="relative h-48 w-full ">
           <Image
+            className="object-fill"
+            width={400}
+            height={400}
             src={i.imgUrl!}
-            layout="fill"
-            objectFit="cover"
             alt="Picture of the author"
             priority
           />
@@ -37,12 +27,8 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
         <p className="font-normal text-gray-700 dark:text-gray-400">
           {date.toDateString()} | {i.location}
         </p>
-        <div>
-          <button disabled={res === undefined} onClick={() => attend(i.id)}>
-            {res ? <AiFillHeart /> : <AiOutlineHeart />}
-          </button>
-        </div>
-      </Card>
+        <div></div>
+      </div>
     </Link>
   );
 };

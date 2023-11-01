@@ -16,10 +16,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
   if (data) {
     return (
       <div>
-        My Post: {JSON.stringify(data)}
         <ul>
           <li>Number of Like :{numberOfLikes}</li>
-          <li>Price per ticker: {data.tickets[0].price}</li>
+
           <li>Event Name: {data.eventName}</li>
           <li>Location : {data.location}</li>
           <li>Hosted by : {data.organizer.name}</li>
@@ -34,9 +33,13 @@ export default async function Page({ params }: { params: { slug: string } }) {
               />
             </li>
           )}
-          <form action="">
-            <button type="submit">Buy Ticket</button>
-          </form>
+          {data.tickets.length > 0 && (
+            <form action="">
+              <button type="submit">
+                Buy Ticket <li>Price per ticker: {data.tickets[0].price}</li>
+              </button>
+            </form>
+          )}
         </ul>
       </div>
     );
