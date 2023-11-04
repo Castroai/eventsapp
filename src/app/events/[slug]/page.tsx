@@ -19,7 +19,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
         My Post: {JSON.stringify(data)}
         <ul>
           <li>Number of Like :{numberOfLikes}</li>
-          <li>Price per ticker: {data.tickets[0].price}</li>
+          {data.tickets.length > 0 && (
+            <li>Price per ticker: {data.tickets[0].price}</li>
+          )}
+
           <li>Event Name: {data.eventName}</li>
           <li>Location : {data.location}</li>
           <li>Hosted by : {data.organizer.name}</li>
