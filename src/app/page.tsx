@@ -6,7 +6,7 @@ import prisma from "./lib/db";
 import { findClosestEvents } from "./lib/geo";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./lib/auth";
-
+import { IoSearchSharp } from "react-icons/io5";
 export default async function Home({
   params,
   searchParams,
@@ -62,7 +62,10 @@ export default async function Home({
       </header>
       <div className="h-full flex flex-col gap-5 p-4">
         <div>
-          <h1>Search For Events Near You</h1>
+          <div className="flex items-center gap-2">
+            <h1>Search For Events Near You</h1>
+            <IoSearchSharp />
+          </div>
           <SearchComponent />
         </div>
         <div className="grid md:grid-cols-4 gap-4  ">
