@@ -5,7 +5,7 @@ import { SearchComponent } from "./components/SearchComponent";
 import { WithData } from "./context/DataContext";
 import DefaultFooter from "./components/Footer";
 import { useEffect } from "react";
-
+import { IoSearchSharp } from "react-icons/io5";
 export default function Home() {
   const { results, fetchAllEvents } = WithData();
   useEffect(() => {
@@ -18,7 +18,10 @@ export default function Home() {
       </header>
       <div className="h-full flex flex-col gap-5 p-4">
         <div>
-          <h1>Search For Events Near You</h1>
+          <div className="flex items-center gap-2">
+            <h1>Search For Events Near You</h1>
+            <IoSearchSharp />
+          </div>
           <SearchComponent />
         </div>
         <div className="grid md:grid-cols-5 gap-4  ">
