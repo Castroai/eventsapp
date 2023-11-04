@@ -2,7 +2,6 @@
 import { FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import DashboardLayout from "@/app/components/DashboardLayout";
-import { Button, Card } from "flowbite-react";
 import { WithData } from "@/app/context/DataContext";
 import HttpService from "@/app/lib/httpservice";
 
@@ -24,8 +23,8 @@ export default function AccountPage() {
 
   return (
     <DashboardLayout>
-      <div className="p-4">
-        <Card>
+      <div className="p-4 ">
+        <div className="card">
           <div>
             <p className="text-lg">Setup Stripe Account</p>
             <p className="text-sm">
@@ -40,9 +39,11 @@ export default function AccountPage() {
             </p>
           </div>
           <form onSubmit={submitHandler}>
-            <Button type="submit">Create Stripe Account</Button>
+            <button className="btn btn-neutral	" type="submit">
+              Create Stripe Account
+            </button>
           </form>
-        </Card>
+        </div>
       </div>
     </DashboardLayout>
   );

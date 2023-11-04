@@ -1,38 +1,60 @@
-import axios from "axios";
-
 export default class HttpService {
-  constructor(
-    private instance = axios.create({
-      baseURL: "/api",
-    })
-  ) {}
+  private baseUrl: string;
+
+  constructor(baseUrl: string = "/api") {
+    this.baseUrl = baseUrl;
+  }
+
+  private async handleResponse(response: Response) {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  }
+
   public async createEvent(data: FormData) {
-    return await this.instance.post("/event", data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    return await fetch(`${this.baseUrl}/event`, {
+      method: "POST",
+      body: data,
+    }).then(this.handleResponse);
   }
+
   public async attendEvent({ eventId }: { eventId: number }) {
-    return await this.instance.put("/event/attend", {
-      id: eventId,
-    });
+    return await fetch(`${this.baseUrl}/event/attend`, {
+      method: "PUT",
+      body: JSON.stringify({ id: eventId }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(this.handleResponse);
   }
+
   public async searchEvents({ lat, long }: { lat: number; long: number }) {
-    return await this.instance.post("/event/search", {
-      lat: lat,
-      long: long,
-    });
+    return await fetch(`${this.baseUrl}/event/search`, {
+      method: "POST",
+      body: JSON.stringify({ lat, long }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(this.handleResponse);
   }
+
   public async allEvents(params?: { user: string }) {
-    return await this.instance.get("/event/search", {
-      params,
-    });
+    const queryParams = params ? `?user=${params.user}` : "";
+    return await fetch(`${this.baseUrl}/event/search${queryParams}`).then(
+      this.handleResponse
+    );
   }
+
   public async accountStatus() {
-    return await this.instance.get("/account/status");
+    return await fetch(`${this.baseUrl}/account/status`).then(
+      this.handleResponse
+    );
   }
+
   public async accountCreate() {
-    return await this.instance.post("/account");
+    return await fetch(`${this.baseUrl}/account`, {
+      method: "POST",
+    }).then(this.handleResponse);
   }
 }

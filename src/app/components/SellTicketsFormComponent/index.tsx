@@ -1,10 +1,8 @@
 "use client";
 import { WithData } from "@/app/context/DataContext";
 import HttpService from "@/app/lib/httpservice";
-import { Card, Label, TextInput } from "flowbite-react";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { Spinner } from "flowbite-react";
 
 const instance = new HttpService();
 
@@ -30,10 +28,10 @@ export const TicketComponent = ({
   }, []);
 
   return (
-    <Card>
+    <div className="card">
       {loading ? (
         <>
-          <Spinner />
+          <p>Loading...</p>
         </>
       ) : (
         <>
@@ -42,9 +40,10 @@ export const TicketComponent = ({
             <div className="flex flex-col gap-2">
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="price">Price</Label>
+                  <label htmlFor="price">Price</label>
                 </div>
-                <TextInput
+                <input
+                  className="input"
                   name="price"
                   id="price"
                   value={ticketState.price}
@@ -60,9 +59,9 @@ export const TicketComponent = ({
               </div>
               <div>
                 <div className="mb-2 block">
-                  <Label htmlFor="quantity">Quantity</Label>
+                  <label htmlFor="quantity">Quantity</label>
                 </div>
-                <TextInput
+                <input
                   name="quantity"
                   id="quantity"
                   value={ticketState.quantity}
@@ -85,6 +84,6 @@ export const TicketComponent = ({
           )}
         </>
       )}
-    </Card>
+    </div>
   );
 };

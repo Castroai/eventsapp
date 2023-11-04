@@ -65,7 +65,7 @@ export default async function Home({
           <h1>Search For Events Near You</h1>
           <SearchComponent />
         </div>
-        <div className="grid md:grid-cols-5 gap-4  ">
+        <div className="grid md:grid-cols-4 gap-4  ">
           {allItems.map((i, index) => {
             return (
               <div key={i.id}>

@@ -1,17 +1,26 @@
-"use client";
-
-import { Footer } from "flowbite-react";
-
 export default function DefaultFooter() {
   return (
-    <Footer container className="border-0">
-      <Footer.Copyright by="Events App™" href="#" year={2023} />
-      <Footer.LinkGroup>
-        <Footer.Link href="#">About</Footer.Link>
-        <Footer.Link href="#">Privacy Policy</Footer.Link>
-        <Footer.Link href="#">Licensing</Footer.Link>
-        <Footer.Link href="#">Contact</Footer.Link>
-      </Footer.LinkGroup>
-    </Footer>
+    <footer className="footer p-10 bg-neutral text-neutral-content">
+      <nav>
+        <header className="footer-title">Services</header>
+        <a className="link link-hover">Branding</a>
+        <a className="link link-hover">Design</a>
+        <a className="link link-hover">Marketing</a>
+        <a className="link link-hover">Advertisement</a>
+      </nav>
+      <nav>
+        <header className="footer-title">Company</header>
+        <a className="link link-hover">About us</a>
+        <a className="link link-hover">Contact</a>
+        <a className="link link-hover">Jobs</a>
+        <a className="link link-hover">Press kit</a>
+      </nav>
+      <nav>
+        <header className="footer-title">Legal</header>
+        <a className="link link-hover">Terms of use</a>
+        <a className="link link-hover">Privacy policy</a>
+        <a className="link link-hover">Cookie policy</a>
+      </nav>
+    </footer>
   );
 }

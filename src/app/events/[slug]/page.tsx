@@ -18,6 +18,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
       <div>
         <ul>
           <li>Number of Like :{numberOfLikes}</li>
+          {data.tickets.length > 0 && (
+            <li>Price per ticker: {data.tickets[0].price}</li>
+          )}
 
           <li>Event Name: {data.eventName}</li>
           <li>Location : {data.location}</li>

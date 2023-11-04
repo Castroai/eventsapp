@@ -1,6 +1,5 @@
 "use client";
 import { options } from "@/app/lib/gplaces";
-import { TextInput } from "flowbite-react";
 import { useEffect, useRef } from "react";
 const AutocompleteInput = () => {
   const autoCompleteRef = useRef<google.maps.places.Autocomplete>();
@@ -40,8 +39,8 @@ const AutocompleteInput = () => {
 
   return (
     <>
-      <TextInput
-        className="w-full"
+      <input
+        className="w-full input"
         ref={inputRef}
         name="location"
         id="autocomplete-input"

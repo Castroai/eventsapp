@@ -1,18 +1,9 @@
 "use client";
 import DashboardLayout from "@/app/components/DashboardLayout";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import {
-  Label,
-  TextInput,
-  Button,
-  Textarea,
-  FileInput,
-  Datepicker,
-} from "flowbite-react";
 import HttpService from "@/app/lib/httpservice";
 import { options } from "@/app/lib/gplaces";
 import { Confirmation } from "@/app/components/Confirmation";
-import { ToggleSwitch } from "flowbite-react";
 import { TicketComponent } from "@/app/components/SellTicketsFormComponent";
 
 const instance = new HttpService();
@@ -125,109 +116,120 @@ const CreateEventPage = () => {
 
   return (
     <DashboardLayout>
-      <div className="w-full p-4 flex flex-col  ">
-        <div className="w-3/4">
-          <form
-            onSubmit={submitHandler}
-            className="flex max-w-full w-full flex-col gap-4"
-          >
-            <div className="max-w-md" id="fileUpload">
-              <div className="mb-2 block">
-                <Label htmlFor="file" value="Upload file" />
-              </div>
-              <FileInput
-                helperText="A  picture to show in the card for your guests 200X200"
-                id="file"
-                onChange={(e) => {
-                  fileHandler(e.target.files);
-                }}
-              />
+      <div className="card w-3/4 bg-base-100 shadow-xl">
+        <form onSubmit={submitHandler} className="card-body	">
+          <div className="max-w-md" id="fileUpload">
+            <div className="mb-2 block">
+              <label htmlFor="file" />
+              Upload File
+              <label />
             </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="eventName" value="Event Name" />
-              </div>
-              <TextInput
-                name="eventName"
-                id="eventName"
-                placeholder="Dance till the sun comes out"
-                required
-                type="text"
-                value={form.eventName}
-                onChange={changeHandler}
-              />
+            <input
+              className="input input-bordered w-full max-w-xs"
+              id="file"
+              onChange={(e) => {
+                fileHandler(e.target.files);
+              }}
+            />
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <label htmlFor="eventName">Event Name</label>
             </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="autocomplete" value="Location" />
-              </div>
-              <TextInput
-                ref={inputRef}
-                name="location"
-                id="autocomplete"
-                placeholder="Location"
-              />
+            <input
+              className="input input-bordered w-full max-w-xs"
+              name="eventName"
+              id="eventName"
+              placeholder="Dance till the sun comes out"
+              required
+              type="text"
+              value={form.eventName}
+              onChange={changeHandler}
+            />
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <label htmlFor="autocomplete">Location</label>
             </div>
+            <input
+              className="input input-bordered w-full max-w-xs"
+              ref={inputRef}
+              name="location"
+              id="autocomplete"
+              placeholder="Location"
+            />
+          </div>
 
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="date" value="Time & Date" />
-              </div>
-              <Datepicker
-                id="date"
-                name="date"
-                title="Time & Date"
-                value={new Date(form.date).toDateString()}
-                onSelectedDateChanged={(date) => {
-                  setForm((current) => ({
-                    ...current,
-                    date: new Date(date).toISOString(),
-                  }));
-                }}
-              />
+          <div>
+            <div className="mb-2 block">
+              <label htmlFor="date">Time & Date</label>
             </div>
-            <div>
-              <div className="mb-2 block">
-                <Label htmlFor="description" value="Description" />
-              </div>
-              <Textarea
-                onChange={changeHandler}
-                value={form.description}
-                name="description"
-                id="description"
-                placeholder="Description"
-                required
-                rows={4}
-              />
+            <input
+              className="input input-bordered w-full max-w-xs"
+              type="date"
+              id="date"
+              name="date"
+              title="Time & Date"
+              value={new Date(form.date).toDateString()}
+              onChange={(e) => {
+                setForm((current) => ({
+                  ...current,
+                  date: new Date(e.target.value).toISOString(),
+                }));
+              }}
+            />
+          </div>
+          <div>
+            <div className="mb-2 block">
+              <label htmlFor="description">Description</label>
             </div>
+            <textarea
+              className="input input-bordered w-full max-w-xs"
+              onChange={changeHandler}
+              value={form.description}
+              name="description"
+              id="description"
+              placeholder="Description"
+              required
+              rows={4}
+            />
+          </div>
+          <div>
+            <input
+              type="checkbox"
+              className="toggle"
+              checked={sellTickets}
+              onChange={(e) => setSellTickets((current) => !current)}
+            />
+          </div>
+          {sellTickets && (
+            <TicketComponent
+              setTicketState={setTicketState}
+              ticketState={ticketState}
+            />
+          )}
+          <div className="flex gap-4">
             <div>
-              <ToggleSwitch
-                checked={sellTickets}
-                label="Sell tickets"
-                onChange={setSellTickets}
-              />
-            </div>
-            {sellTickets && (
-              <TicketComponent
-                setTicketState={setTicketState}
-                ticketState={ticketState}
-              />
-            )}
-            <div className="flex gap-4">
-              <Button className="flex w-full" type="submit">
+              <button
+                type="submit"
+                className="flex w-full btn btn-primary"
+                color="light"
+              >
                 Submit
-              </Button>
-              <Button
+              </button>
+            </div>
+            <div>
+              <button
                 onClick={(e) => submitHandler(e, "DRAFT")}
-                className="flex w-full"
+                className="flex w-full btn btn-secondary"
                 color="light"
                 type="button"
               >
                 Save
-              </Button>
+              </button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
     </DashboardLayout>
   );

@@ -3,7 +3,6 @@ import { ReactNode, createContext, useContext } from "react";
 import { useDataHook } from "../hooks/DataHook";
 import { Event } from "@prisma/client";
 import { Wrapper } from "@googlemaps/react-wrapper";
-import { Flowbite } from "flowbite-react";
 import Stripe from "stripe";
 
 interface ContextInterface {
@@ -42,14 +41,12 @@ export const DataWrapper = ({ children }: { children: ReactNode }) => {
         stripeStatus,
       }}
     >
-      <Flowbite>
-        <Wrapper
-          apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
-          libraries={["places"]}
-        >
-          {children}
-        </Wrapper>
-      </Flowbite>
+      <Wrapper
+        apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+        libraries={["places"]}
+      >
+        {children}
+      </Wrapper>
     </Context.Provider>
   );
 };
