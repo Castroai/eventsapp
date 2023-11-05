@@ -7,7 +7,7 @@ export const EditorComponent = () => {
 
   return (
     <Editor
-      apiKey="37cs1s4f8xbvm39jkg981ytbyb2g9ykyqmuai6pud6o8iojq"
+      apiKey={process.env.NEXT_PUBLIC_TINYMC_KEY ?? ""}
       plugins="wordcount"
       onInit={(evt, editor) => (editorRef.current = editor)}
       init={{
