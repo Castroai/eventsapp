@@ -79,7 +79,6 @@ export async function POST(request: Request) {
           unit_amount: amountInPennies,
         },
       });
-      console.log(newStripeProduct);
     }
     const res = await prisma.event.create(data);
     return NextResponse.json(res);

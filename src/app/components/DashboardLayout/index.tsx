@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ReactNode } from "react";
-export default function DashboardLayout({ children }: { children: ReactNode }) {
+export default function DashboardLayout({
+  children,
+}: Readonly<{ children: ReactNode }>) {
   return (
     <div className="drawer lg:drawer-open ">
       <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />

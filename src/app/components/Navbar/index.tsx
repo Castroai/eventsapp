@@ -1,5 +1,6 @@
 import { authOptions } from "@/app/lib/auth";
 import { getServerSession } from "next-auth";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function DefaultNavbar() {
@@ -18,7 +19,12 @@ export default async function DefaultNavbar() {
 
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
               <div className="w-10 rounded-full">
-                <img src={session.user!.image!}></img>
+                <Image
+                  src={session.user!.image!}
+                  alt={"Google Profile Picture"}
+                  width={20}
+                  height={20}
+                ></Image>
               </div>
             </label>
             <ul

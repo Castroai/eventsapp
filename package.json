@@ -16,6 +16,7 @@
     "@prisma/client": "^5.5.2",
     "@stripe/react-stripe-js": "^2.3.1",
     "@stripe/stripe-js": "^2.1.10",
+    "@tinymce/tinymce-react": "^4.3.0",
     "@types/google.maps": "^3.54.5",
     "@types/uuid": "^9.0.6",
     "@vercel/analytics": "^1.1.1",

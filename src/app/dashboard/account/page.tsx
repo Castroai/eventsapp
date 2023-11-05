@@ -1,40 +1,21 @@
-import { FormEvent, useEffect } from "react";
-
-import { redirect } from "next/navigation";
-
 import DashboardLayout from "@/app/components/DashboardLayout";
-import { WithData } from "@/app/context/DataContext";
-import HttpService from "@/app/lib/httpservice";
 import prisma from "@/app/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
 import { stripe } from "@/app/lib/stripe";
 import Stripe from "stripe";
-
-const instance = new HttpService();
+import { fetchOrCreateStripeConnectLink } from "@/app/actions";
 
 export default async function AccountPage() {
   const session = await getServerSession(authOptions);
   let status: Stripe.Account | null;
-  const submitHandler = async (formData: FormData) => {
-    "use server";
-    const data = await fetch(`http://localhost:3000/api/account`, {
-      method: "POST",
-    });
-    console.log(data);
-    const res = await data.json();
-    console.log(res);
-    console.log(res);
-    // redirect(res.url);
-  };
 
   const prismaUser = await prisma.user.findUnique({
     where: {
       id: session!.user!.id,
     },
   });
-
-  if (prismaUser && prismaUser.stripeAccountId) {
+  if (prismaUser?.stripeAccountId) {
     status = await stripe().accounts.retrieve(prismaUser.stripeAccountId);
   } else {
     status = null;
@@ -55,7 +36,7 @@ export default async function AccountPage() {
             <p> Current Status of details_submitted :</p>
             <p>{status && JSON.stringify(status.details_submitted)}</p>
           </div>
-          <form action={submitHandler}>
+          <form action={fetchOrCreateStripeConnectLink}>
             <button className="btn btn-neutral" type="submit">
               Create Stripe Account
             </button>

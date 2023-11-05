@@ -40,7 +40,7 @@ const AutocompleteInput = () => {
   return (
     <>
       <input
-        className="w-full input"
+        className="w-full input input-bordered"
         ref={inputRef}
         name="location"
         id="autocomplete-input"

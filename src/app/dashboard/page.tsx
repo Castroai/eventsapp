@@ -55,9 +55,9 @@ export default async function Dashboard() {
                 </tr>
               </thead>
               <tbody>
-                {eventsWithLikesCount.map((event, index) => {
+                {eventsWithLikesCount.map((event) => {
                   return (
-                    <tr>
+                    <tr key={event.id}>
                       <th>{event.id}</th>
                       <td>{event.eventName}</td>
                       <td>{event.location}</td>
