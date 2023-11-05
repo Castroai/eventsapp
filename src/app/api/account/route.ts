@@ -10,13 +10,17 @@ export async function POST(request: Request) {
   const baseUrl = parsedUrl.origin;
 
   const session = await getServerSession(authOptions);
+  console.log(`SESSION: ${session}`);
   if (session && session.user) {
     const prismaUser = await prisma.user.findUnique({
       where: {
         id: session.user.id,
       },
     });
+    console.log(`prismaUser`);
     if (prismaUser && prismaUser.stripeAccountId) {
+      console.log(`stripeAccountId`);
+
       const accountLink = await stripe().accountLinks.create({
         account: prismaUser.stripeAccountId,
         refresh_url: `${baseUrl}/dashboard/account`,
@@ -47,6 +51,9 @@ export async function POST(request: Request) {
       return NextResponse.json(accountLink);
     }
   } else {
-    return NextResponse.error();
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }

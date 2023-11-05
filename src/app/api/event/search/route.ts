@@ -122,6 +122,7 @@ export async function GET(request: NextRequest, context: unknown) {
         numberOfLikes: event.users.length,
       };
     });
+    console.log(`HERERER`);
     return NextResponse.json(eventsWithLikesCount);
   }
   // All Published Events

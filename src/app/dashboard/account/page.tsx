@@ -1,25 +1,44 @@
-"use client";
 import { FormEvent, useEffect } from "react";
-import { useRouter } from "next/navigation";
+
+import { redirect } from "next/navigation";
+
 import DashboardLayout from "@/app/components/DashboardLayout";
 import { WithData } from "@/app/context/DataContext";
 import HttpService from "@/app/lib/httpservice";
+import prisma from "@/app/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/auth";
+import { stripe } from "@/app/lib/stripe";
+import Stripe from "stripe";
 
 const instance = new HttpService();
 
-export default function AccountPage() {
-  const router = useRouter();
-  const { stripeStatus, fetchStatus } = WithData();
-
-  const submitHandler = async (e: FormEvent) => {
-    e.preventDefault();
-    const { data } = await instance.accountCreate();
-    router.push(data.url);
+export default async function AccountPage() {
+  const session = await getServerSession(authOptions);
+  let status: Stripe.Account | null;
+  const submitHandler = async (formData: FormData) => {
+    "use server";
+    const data = await fetch(`http://localhost:3000/api/account`, {
+      method: "POST",
+    });
+    console.log(data);
+    const res = await data.json();
+    console.log(res);
+    console.log(res);
+    // redirect(res.url);
   };
 
-  useEffect(() => {
-    fetchStatus();
-  }, []);
+  const prismaUser = await prisma.user.findUnique({
+    where: {
+      id: session!.user!.id,
+    },
+  });
+
+  if (prismaUser && prismaUser.stripeAccountId) {
+    status = await stripe().accounts.retrieve(prismaUser.stripeAccountId);
+  } else {
+    status = null;
+  }
 
   return (
     <DashboardLayout>
@@ -34,12 +53,10 @@ export default function AccountPage() {
           </div>
           <div>
             <p> Current Status of details_submitted :</p>
-            <p>
-              {stripeStatus && JSON.stringify(stripeStatus.details_submitted)}
-            </p>
+            <p>{status && JSON.stringify(status.details_submitted)}</p>
           </div>
-          <form onSubmit={submitHandler}>
-            <button className="btn btn-neutral	" type="submit">
+          <form action={submitHandler}>
+            <button className="btn btn-neutral" type="submit">
               Create Stripe Account
             </button>
           </form>

@@ -1,16 +1,35 @@
-"use client";
-import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
-import { WithData } from "../context/DataContext";
 import Link from "next/link";
-
-export default function Dashboard() {
-  const { results, fetchAllEvents } = WithData();
-  useEffect(() => {
-    fetchAllEvents({
-      user: "me",
-    });
-  }, []);
+import { getServerSession } from "next-auth";
+import { authOptions } from "../lib/auth";
+import prisma from "../lib/db";
+export default async function Dashboard() {
+  const session = await getServerSession(authOptions);
+  const data = await prisma.event.findMany({
+    where: {
+      status: {
+        equals: "PUBLISHED",
+      },
+      AND: {
+        organizerId: {
+          equals: session!.user!.id,
+        },
+      },
+    },
+    include: {
+      users: {
+        select: {
+          userId: true,
+        },
+      },
+    },
+  });
+  const eventsWithLikesCount = data.map((event) => {
+    return {
+      ...event,
+      numberOfLikes: event.users.length,
+    };
+  });
   return (
     <DashboardLayout>
       <div className="p-4 flex flex-col gap-4">
@@ -24,9 +43,31 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
-        {/*  */}
-        <div className="card"></div>
+        <div className="card">
+          <div className="overflow-x-auto">
+            <table className="table">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Locatiom</th>
+                </tr>
+              </thead>
+              <tbody>
+                {eventsWithLikesCount.map((event, index) => {
+                  return (
+                    <tr>
+                      <th>{event.id}</th>
+                      <td>{event.eventName}</td>
+                      <td>{event.location}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </DashboardLayout>
   );

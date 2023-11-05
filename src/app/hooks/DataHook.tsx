@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Event } from "@prisma/client";
 import HttpService from "../lib/httpservice";
 import Stripe from "stripe";
@@ -10,19 +10,19 @@ export const useDataHook = () => {
 
   const searchEvents = async ({ lat, long }: { lat: number; long: number }) => {
     setLoading(true);
-    const { data } = await service.searchEvents({ lat, long });
+    const data = await service.searchEvents({ lat, long });
     setResults(data);
     setLoading(false);
   };
   const fetchAllEvents = async (params?: { user: string }) => {
     setLoading(true);
-    const { data } = await service.allEvents(params);
+    const data = await service.allEvents(params);
     setResults(data);
     setLoading(false);
   };
   const fetchStatus = async () => {
     setLoading(true);
-    const { data } = await service.accountStatus();
+    const data = await service.accountStatus();
     setStripeStatus(data);
     setLoading(false);
     return;

@@ -8,25 +8,26 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
   return (
     <Link
       href={`/events/${i.slug}`}
-      className="card card-compact w-96 bg-base-100 shadow-xl"
+      passHref
+      className="max-w-sm mx-auto bg-white rounded-xl overflow-hidden shadow-lg card card-bordered h-full"
     >
-      <figure className="relative h-full w-full ">
+      <div className="relative h-64">
         <Image
-          className="object-fill"
-          width={400}
-          height={400}
+          className="object-cover w-full h-full"
           src={i.imgUrl!}
-          alt="Picture of the author"
-          priority
+          alt="Event Image"
+          layout="fill"
         />
-      </figure>
-      <div className="card-body">
-        <h2 className="card-title">{i.eventName}</h2>
-        <p className="font-normal text-gray-700 dark:text-gray-400">
+      </div>
+      <div className="p-6">
+        <h2 className="text-2xl font-semibold text-gray-800">{i.eventName}</h2>
+        <p className="mt-2 text-gray-600">
           {date.toDateString()} | {i.location}
         </p>
-        <div className="card-actions justify-end">
-          <button className="btn btn-primary">Buy Now</button>
+        <div className="mt-4 flex justify-end">
+          <button className="px-4 py-2 text-white bg-indigo-600 rounded hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-indigo-200">
+            Buy Now
+          </button>
         </div>
       </div>
     </Link>

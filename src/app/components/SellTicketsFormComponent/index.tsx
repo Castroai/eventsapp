@@ -1,10 +1,7 @@
 "use client";
 import { WithData } from "@/app/context/DataContext";
-import HttpService from "@/app/lib/httpservice";
 import Link from "next/link";
 import { Dispatch, SetStateAction, useEffect } from "react";
-
-const instance = new HttpService();
 
 export const TicketComponent = ({
   setTicketState,
