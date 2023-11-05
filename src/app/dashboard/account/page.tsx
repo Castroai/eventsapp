@@ -1,31 +1,30 @@
-"use client";
-import { FormEvent, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import DashboardLayout from "@/app/components/DashboardLayout";
-import { Button, Card } from "flowbite-react";
-import { WithData } from "@/app/context/DataContext";
-import HttpService from "@/app/lib/httpservice";
+import prisma from "@/app/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/lib/auth";
+import { stripe } from "@/app/lib/stripe";
+import Stripe from "stripe";
+import { fetchOrCreateStripeConnectLink } from "@/app/actions";
 
-const instance = new HttpService();
+export default async function AccountPage() {
+  const session = await getServerSession(authOptions);
+  let status: Stripe.Account | null;
 
-export default function AccountPage() {
-  const router = useRouter();
-  const { stripeStatus, fetchStatus } = WithData();
-
-  const submitHandler = async (e: FormEvent) => {
-    e.preventDefault();
-    const { data } = await instance.accountCreate();
-    router.push(data.url);
-  };
-
-  useEffect(() => {
-    fetchStatus();
-  }, []);
+  const prismaUser = await prisma.user.findUnique({
+    where: {
+      id: session!.user!.id,
+    },
+  });
+  if (prismaUser?.stripeAccountId) {
+    status = await stripe().accounts.retrieve(prismaUser.stripeAccountId);
+  } else {
+    status = null;
+  }
 
   return (
     <DashboardLayout>
-      <div className="p-4">
-        <Card>
+      <div className="p-4 ">
+        <div className="card">
           <div>
             <p className="text-lg">Setup Stripe Account</p>
             <p className="text-sm">
@@ -35,14 +34,14 @@ export default function AccountPage() {
           </div>
           <div>
             <p> Current Status of details_submitted :</p>
-            <p>
-              {stripeStatus && JSON.stringify(stripeStatus.details_submitted)}
-            </p>
+            <p>{status && JSON.stringify(status.details_submitted)}</p>
           </div>
-          <form onSubmit={submitHandler}>
-            <Button type="submit">Create Stripe Account</Button>
+          <form action={fetchOrCreateStripeConnectLink}>
+            <button className="btn btn-neutral" type="submit">
+              Create Stripe Account
+            </button>
           </form>
-        </Card>
+        </div>
       </div>
     </DashboardLayout>
   );

@@ -1,38 +1,62 @@
-"use client";
-import { Button, DarkThemeToggle, Navbar } from "flowbite-react";
+import { authOptions } from "@/app/lib/auth";
+import { getServerSession } from "next-auth";
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useSession, signIn, signOut } from "next-auth/react";
-const NavLink = ({ pathName, label }: { pathName: string; label: string }) => {
-  const path = usePathname();
-  return (
-    <Navbar.Link href={pathName} active={path === pathName}>
-      {label}
-    </Navbar.Link>
-  );
-};
-export default function DefaultNavbar() {
-  const { data: session, status } = useSession();
+
+export default async function DefaultNavbar() {
+  const session = await getServerSession(authOptions);
+  console.log(session);
 
   return (
-    <Navbar fluid>
-      <Navbar.Brand as={Link} href="/">
-        <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-          Events App
-        </span>
-      </Navbar.Brand>
-      <div className="flex md:order-2">
-        <DarkThemeToggle />
-        {status === "authenticated" ? (
-          <Button onClick={() => signOut()}>Sign out</Button>
-        ) : (
-          <Button onClick={() => signIn()}>Sign in</Button>
-        )}
-        <Navbar.Toggle />
+    <div className="navbar bg-base-100">
+      <div className="flex-1">
+        <a className="btn btn-ghost normal-case text-xl">Events App</a>
       </div>
-      <Navbar.Collapse className="items-center flex h-full">
-        <NavLink label="Host an event" pathName="/dashboard" />
-      </Navbar.Collapse>
-    </Navbar>
+      {session ? (
+        <div className="flex-none gap-2">
+          <div className="dropdown dropdown-end flex items-center gap-2">
+            <p>{session.user?.name}</p>
+
+            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+              <div className="w-10 rounded-full">
+                <Image
+                  src={session.user!.image!}
+                  alt={"Google Profile Picture"}
+                  width={20}
+                  height={20}
+                ></Image>
+              </div>
+            </label>
+            <ul
+              tabIndex={0}
+              className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <a className="justify-between">
+                  Profile
+                  <span className="badge">New</span>
+                </a>
+              </li>
+              <li>
+                <Link href={"/dashboard/account"}>Settings</Link>
+              </li>
+              <li>
+                <Link href={"/api/auth/signout"}>Logout</Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+      ) : (
+        <div className="flex-none gap-2">
+          <ul tabIndex={0}>
+            <li>
+              <Link href={"/api/auth/signin"} className="btn btn-primary">
+                Sign in
+              </Link>
+            </li>
+          </ul>
+        </div>
+      )}
+    </div>
   );
 }

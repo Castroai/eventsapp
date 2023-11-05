@@ -1,75 +1,73 @@
-"use client";
-import { useEffect, useState } from "react";
 import DashboardLayout from "../components/DashboardLayout";
-import { Button, Card } from "flowbite-react";
-import { WithData } from "../context/DataContext";
-import { Table } from "flowbite-react";
 import Link from "next/link";
-
-export default function Dashboard() {
-  const { results, fetchAllEvents } = WithData();
-  useEffect(() => {
-    fetchAllEvents({
-      user: "me",
-    });
-  }, []);
+import { getServerSession } from "next-auth";
+import { authOptions } from "../lib/auth";
+import prisma from "../lib/db";
+export default async function Dashboard() {
+  const session = await getServerSession(authOptions);
+  const data = await prisma.event.findMany({
+    where: {
+      status: {
+        equals: "PUBLISHED",
+      },
+      AND: {
+        organizerId: {
+          equals: session!.user!.id,
+        },
+      },
+    },
+    include: {
+      users: {
+        select: {
+          userId: true,
+        },
+      },
+    },
+  });
+  const eventsWithLikesCount = data.map((event) => {
+    return {
+      ...event,
+      numberOfLikes: event.users.length,
+    };
+  });
   return (
     <DashboardLayout>
       <div className="p-4 flex flex-col gap-4">
-        <Card>
+        <div className="card">
           <div className="flex flex-col gap-2">
             <h1 className="text-md">Start Selling Tickets today</h1>
             <div>
               <Link href={"/dashboard/create"}>
-                <Button>Create New Event</Button>
+                <button className="btn btn-primary">Create New Event</button>
               </Link>
             </div>
           </div>
-        </Card>
-
-        {/*  */}
-        <Card>
-          <Table striped>
-            <Table.Head>
-              <Table.HeadCell>Event Name</Table.HeadCell>
-              <Table.HeadCell>Date</Table.HeadCell>
-              <Table.HeadCell>Likes</Table.HeadCell>
-              <Table.HeadCell>Price</Table.HeadCell>
-              <Table.HeadCell>
-                <span className="sr-only">Edit</span>
-              </Table.HeadCell>
-            </Table.Head>
-            <Table.Body className="divide-y">
-              {results &&
-                results.map((re, index) => {
+        </div>
+        <div className="card">
+          <div className="overflow-x-auto">
+            <table className="table">
+              {/* head */}
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Locatiom</th>
+                </tr>
+              </thead>
+              <tbody>
+                {eventsWithLikesCount.map((event) => {
                   return (
-                    <Table.Row
-                      key={index}
-                      className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                    >
-                      <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                        {re.eventName}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {new Date(re.date).toDateString()}
-                      </Table.Cell>
-                      {/* TODO: Fix re.numberOfLikes types */}
-                      <Table.Cell>3</Table.Cell>
-                      <Table.Cell>$29.99</Table.Cell>
-                      <Table.Cell>
-                        <a
-                          className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-                          href="/tables"
-                        >
-                          <p>Edit</p>
-                        </a>
-                      </Table.Cell>
-                    </Table.Row>
+                    <tr key={event.id}>
+                      <th>{event.id}</th>
+                      <td>{event.eventName}</td>
+                      <td>{event.location}</td>
+                    </tr>
                   );
                 })}
-            </Table.Body>
-          </Table>
-        </Card>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </DashboardLayout>
   );
