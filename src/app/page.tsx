@@ -1,5 +1,5 @@
 import DefaultNavbar from "./components/Navbar";
-import { SearchComponent } from "./components/SearchForm";
+import { LocationSearchForm } from "./components/LocationSearchForm";
 import DefaultFooter from "./components/Footer";
 import { IoSearchSharp } from "react-icons/io5";
 import { EventsGrid } from "./components/EventsGrid";
@@ -40,7 +40,7 @@ export default async function Home({
             <h1>Search For Events Near You</h1>
             <IoSearchSharp />
           </div>
-          <SearchComponent />
+          <LocationSearchForm />
         </div>
         <Suspense fallback="Fetching Cards from suspense">
           <EventsGrid location={location} />

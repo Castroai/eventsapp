@@ -1,6 +1,6 @@
 import AutocompleteInput from "../AutoCompleteInput";
 
-export const SearchComponent = () => {
+export const LocationSearchForm = () => {
   return (
     <form className="flex gap-4 w-full" method="GET">
       <div className="input-group">
