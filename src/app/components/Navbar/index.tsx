@@ -5,8 +5,6 @@ import Link from "next/link";
 
 export default async function DefaultNavbar() {
   const session = await getServerSession(authOptions);
-  console.log(session);
-
   return (
     <div className="navbar bg-base-100">
       <div className="flex-1">

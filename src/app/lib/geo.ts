@@ -15,7 +15,6 @@ export async function findClosestEvents(
   const allEvents = await prisma.event.findMany();
   if (target) {
     const eventsWithDistance = allEvents.map((event) => {
-      console.log(target);
       const distance = calculateDistance(target, {
         lat: event.lat,
         long: event.long,
@@ -24,7 +23,6 @@ export async function findClosestEvents(
     });
 
     eventsWithDistance.sort((a, b) => a.distance - b.distance);
-    console.log(eventsWithDistance);
     return eventsWithDistance;
   } else {
     return allEvents;
