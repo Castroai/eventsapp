@@ -1,4 +1,4 @@
-import DashboardLayout from "../components/DashboardLayout";
+import DashboardLayout from "../components/Layouts/DashboardLayout";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/auth";

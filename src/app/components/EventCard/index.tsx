@@ -6,17 +6,15 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
   const date = new Date(i.date);
 
   return (
-    <Link
-      href={`/events/${i.slug}`}
-      className="bg-white rounded-lg p-4 shadow-md"
-    >
-      <div className="relative h-40 rounded-md">
+    <Link href={`/events/${i.slug}`} className="rounded-lg p-4 shadow-md">
+      <div className="">
         <Image
+          priority
           src={i.imgUrl!}
           alt={i.eventName}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-md"
+          className="rounded-md object-fill"
+          width={600}
+          height={400}
         />
       </div>
       <div className="mt-4">

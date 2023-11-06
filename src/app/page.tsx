@@ -1,9 +1,10 @@
-import DefaultNavbar from "./components/Navbar";
-import { LocationSearchForm } from "./components/LocationSearchForm";
-import DefaultFooter from "./components/Footer";
-import { IoSearchSharp } from "react-icons/io5";
+import { LocationSearchForm } from "./components/SearchBar";
 import { EventsGrid } from "./components/EventsGrid";
 import { Suspense } from "react";
+import { MainLayout } from "./components/Layouts/MainLayout";
+import Skeleton from "./components/EventsGrid/skeleteon";
+import Await from "./components/EventsGrid/await";
+import { findClosestEvents } from "./lib/geo";
 
 interface HomeProps {
   params: { slug: string };
@@ -29,26 +30,25 @@ export default async function Home({
       long: longitude,
     };
   }
+  const items = findClosestEvents(location);
+
   return (
-    <div className="flex flex-col gap-5 h-full justify-between dark:bg-current">
-      <header>
-        <DefaultNavbar />
-      </header>
-      <div className="h-full flex flex-col gap-5 p-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1>Search For Events Near You</h1>
-            <IoSearchSharp />
+    <MainLayout>
+      <div className="flex flex-col gap-5 h-full justify-between dark:bg-current container mx-auto">
+        <div className="h-full flex flex-col gap-5 p-4">
+          <div>
+            <div className="flex items-center gap-2">
+              <h1>Search For Events Near You</h1>
+            </div>
+            <LocationSearchForm />
           </div>
-          <LocationSearchForm />
+          <Suspense fallback={<Skeleton />}>
+            <Await promise={items}>
+              {(events) => <EventsGrid allItems={events} />}
+            </Await>
+          </Suspense>
         </div>
-        <Suspense fallback="Fetching Cards from suspense">
-          <EventsGrid location={location} />
-        </Suspense>
       </div>
-      <div className="align-bottom">
-        <DefaultFooter />
-      </div>
-    </div>
+    </MainLayout>
   );
 }

@@ -1,4 +1,4 @@
-import DashboardLayout from "@/app/components/DashboardLayout";
+import DashboardLayout from "@/app/components/Layouts/DashboardLayout";
 import prisma from "@/app/lib/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";

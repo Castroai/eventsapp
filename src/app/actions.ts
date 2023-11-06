@@ -31,6 +31,7 @@ export async function searchEvents(prevData: any, formData: FormData) {
 
 export const createNewEvent = async (formData: FormData): Promise<Event> => {
   "use server";
+  console.log(formData);
   const session = await getServerSession(authOptions);
   const schema = z.object({
     eventName: z.string().min(1),

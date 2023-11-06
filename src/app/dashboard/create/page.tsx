@@ -1,7 +1,7 @@
-import DashboardLayout from "@/app/components/DashboardLayout";
+import DashboardLayout from "@/app/components/Layouts/DashboardLayout";
 import AutocompleteInput from "@/app/components/AutoCompleteInput";
 import { createNewEvent } from "@/app/actions";
-import { EditorComponent } from "@/app/components/Editor";
+import { EditorComponent } from "@/app/components/WYSIWYGEditor";
 
 const CreateEventPage = () => {
   return (
