@@ -130,3 +130,52 @@ export const commentOnEvent = async (formData: FormData) => {
   }
   throw new Error("No User Found");
 };
+
+export const likeEvent = async (formData: FormData) => {
+  const session = await getServerSession(authOptions);
+  const schema = z.object({
+    eventId: z.string().min(1),
+  });
+  const data = schema.parse({
+    eventId: formData.get("eventId"),
+  });
+  if (session?.user) {
+    const existingAttendance = await prisma.usersAttendingEvents.findUnique({
+      where: {
+        eventId_userId: {
+          eventId: parseInt(data.eventId),
+          userId: session.user.id,
+        },
+      },
+    });
+    if (existingAttendance) {
+      // If the user is already attending, remove the attendance record
+      await prisma.usersAttendingEvents.delete({
+        where: {
+          eventId_userId: {
+            eventId: parseInt(data.eventId),
+            userId: session.user.id,
+          },
+        },
+      });
+      console.log("User has unattended the event.");
+      revalidatePath("/");
+
+      return {
+        attending: false,
+      };
+    } else {
+      // If the user is not attending, add a new attendance record
+      await prisma.usersAttendingEvents.create({
+        data: {
+          userId: session.user.id,
+          eventId: parseInt(data.eventId),
+        },
+      });
+      console.log("User is now attending the event.");
+    }
+    revalidatePath("/");
+  } else {
+    return {};
+  }
+};

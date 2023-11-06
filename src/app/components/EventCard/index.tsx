@@ -1,6 +1,7 @@
 import { Event } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
+import { LikeButton } from "../LikeButton";
 
 export const EventCard = (i: Event & { attending?: boolean }) => {
   const date = new Date(i.date);
@@ -22,6 +23,7 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
         <p className="text-gray-600">{date.toDateString()}</p>
         <p className="text-gray-600">{i.location}</p>
       </div>
+      <LikeButton eventId={i.id} attending={i.attending} />
     </Link>
   );
 };
