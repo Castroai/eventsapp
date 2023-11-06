@@ -1,7 +1,9 @@
+"use server";
 import DashboardLayout from "@/app/components/Layouts/DashboardLayout";
 import AutocompleteInput from "@/app/components/AutoCompleteInput";
 import { createNewEvent } from "@/app/actions";
 import { EditorComponent } from "@/app/components/WYSIWYGEditor";
+import { EventCreateButton } from "@/app/components/EventCreateButton";
 
 const CreateEventPage = () => {
   return (
@@ -63,13 +65,14 @@ const CreateEventPage = () => {
           </div>
           <div className="flex gap-4">
             <div>
-              <button
+              {/* <button
                 type="submit"
                 className="flex w-full btn btn-primary"
                 color="light"
               >
                 Submit
-              </button>
+              </button> */}
+              <EventCreateButton />
             </div>
             <div>
               <button

@@ -30,7 +30,6 @@ export async function searchEvents(prevData: any, formData: FormData) {
 }
 
 export const createNewEvent = async (formData: FormData): Promise<Event> => {
-  "use server";
   console.log(formData);
   const session = await getServerSession(authOptions);
   const schema = z.object({
@@ -75,7 +74,7 @@ export const createNewEvent = async (formData: FormData): Promise<Event> => {
           eventName: data.eventName,
           lat: parseFloat(data.latitude),
           long: parseFloat(data.longitude),
-          location: data.longitude,
+          location: data.location,
           imgUrl: uploadUrl,
           slug: slug,
         },
