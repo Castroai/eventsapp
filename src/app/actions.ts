@@ -10,25 +10,6 @@ import { stripe } from "./lib/stripe";
 import { Event, Prisma } from "@prisma/client";
 import { uploadImage } from "./lib/gstorage";
 
-export async function searchEvents(prevData: any, formData: FormData) {
-  const schema = z.object({
-    location: z.string().min(1),
-    latitude: z.string().min(1),
-    longitude: z.string().min(1),
-  });
-  const data = schema.parse({
-    location: formData.get("location"),
-    latitude: formData.get("latitude"),
-    longitude: formData.get("longitude"),
-  });
-  try {
-    revalidatePath("/");
-    return { message: `Hello` };
-  } catch (e) {
-    return { message: "Failed to create todo" };
-  }
-}
-
 export const createNewEvent = async (formData: FormData): Promise<Event> => {
   console.log(formData);
   const session = await getServerSession(authOptions);
@@ -49,46 +30,42 @@ export const createNewEvent = async (formData: FormData): Promise<Event> => {
     description: formData.get("description"),
   });
   if (session?.user) {
-    try {
-      const user = await prisma.user.findUnique({
-        where: {
-          id: session.user.id,
-        },
-      });
-      const createSlug = (name: string) => {
-        // Convert the name to lowercase and replace spaces with hyphens
-        const slug = name.toLowerCase().replace(/\s+/g, "-");
-        return slug;
-      };
-      let uploadUrl: string | undefined;
-      if (formData.has("file")) {
-        const file = formData.get("file") as File;
-        uploadUrl = await uploadImage(file);
-      }
-      const slug = createSlug(data.eventName);
-      const query: Prisma.EventCreateArgs = {
-        data: {
-          organizerId: user!.id,
-          date: new Date(data.date),
-          description: data.description,
-          eventName: data.eventName,
-          lat: parseFloat(data.latitude),
-          long: parseFloat(data.longitude),
-          location: data.location,
-          imgUrl: uploadUrl,
-          slug: slug,
-        },
-      };
-      return await prisma.event.create(query);
-    } catch (error) {
-      throw error;
+    const user = await prisma.user.findUnique({
+      where: {
+        id: session.user.id,
+      },
+    });
+    const createSlug = (name: string) => {
+      // Convert the name to lowercase and replace spaces with hyphens
+      const slug = name.toLowerCase().replace(/\s+/g, "-");
+      return slug;
+    };
+    let uploadUrl: string | undefined;
+    if (formData.has("file")) {
+      const file = formData.get("file") as File;
+      uploadUrl = await uploadImage(file);
     }
+    const slug = createSlug(data.eventName);
+    const query: Prisma.EventCreateArgs = {
+      data: {
+        organizerId: user!.id,
+        date: new Date(data.date),
+        description: data.description,
+        eventName: data.eventName,
+        lat: parseFloat(data.latitude),
+        long: parseFloat(data.longitude),
+        location: data.location,
+        imgUrl: uploadUrl,
+        slug: slug,
+      },
+    };
+    return await prisma.event.create(query);
   } else {
     throw new Error("No User");
   }
 };
 
-export async function fetchOrCreateStripeConnectLink(formData: FormData) {
+export const fetchOrCreateStripeConnectLink = async (formData: FormData) => {
   const baseUrl = "http://localhost:3000";
   const session = await getServerSession(authOptions);
   if (session?.user) {
@@ -128,4 +105,28 @@ export async function fetchOrCreateStripeConnectLink(formData: FormData) {
   } else {
     throw new Error("User Not Authenicated");
   }
-}
+};
+
+export const commentOnEvent = async (formData: FormData) => {
+  console.log(formData);
+  const schema = z.object({
+    comment: z.string().min(1),
+    eventId: z.string().min(1),
+  });
+  const data = schema.parse({
+    comment: formData.get("comment"),
+    eventId: formData.get("eventId"),
+  });
+  const session = await getServerSession(authOptions);
+  if (session?.user) {
+    const res = await prisma.comment.create({
+      data: {
+        text: data.comment,
+        eventId: parseInt(data.eventId),
+      },
+    });
+    revalidatePath("/");
+    return res;
+  }
+  throw new Error("No User Found");
+};

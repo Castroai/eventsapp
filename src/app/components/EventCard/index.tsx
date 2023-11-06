@@ -21,7 +21,6 @@ export const EventCard = (i: Event & { attending?: boolean }) => {
         <h2 className="text-lg font-semibold">{i.eventName}</h2>
         <p className="text-gray-600">{date.toDateString()}</p>
         <p className="text-gray-600">{i.location}</p>
-        <p className="mt-2">{i.description}</p>
       </div>
     </Link>
   );

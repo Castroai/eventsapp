@@ -90,6 +90,7 @@ model Event {
   imgUrl      String?                @default("https://placehold.co/600x400.png")
   slug        String                 @unique
   tickets     Ticket[]
+  comments    Comment[]
 }
 
 model Ticket {
@@ -124,4 +125,13 @@ model EventCategory {
   id    Int     @id @default(autoincrement())
   name  String
   Event Event[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  eventId   Int
+  event     Event    @relation(fields: [eventId], references: [id])
 }

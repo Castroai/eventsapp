@@ -1,3 +1,4 @@
+import { CommentBox } from "@/app/components/CommentBox";
 import { MainLayout } from "@/app/components/Layouts/MainLayout";
 import prisma from "@/app/lib/db";
 import Image from "next/image";
@@ -13,9 +14,11 @@ export default async function Page({
       tickets: {},
       organizer: {},
       users: {},
+      comments: {},
     },
   });
   const numberOfLikes = data?.users.length;
+
   if (data) {
     return (
       <MainLayout>
@@ -54,6 +57,20 @@ export default async function Page({
               </form>
             )}
           </ul>
+          <CommentBox eventId={data.id} />
+          <div>
+            <ul>
+              <li>
+                {data.comments.length > 0 && (
+                  <>
+                    {data.comments.map((comment) => {
+                      return <div key={comment.id}>{comment.text}</div>;
+                    })}
+                  </>
+                )}
+              </li>
+            </ul>
+          </div>
         </div>
       </MainLayout>
     );

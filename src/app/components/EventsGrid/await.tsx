@@ -23,10 +23,10 @@ export default async function Await<T>({
       },
     });
     // All events that user is attending
-    const eventIdAttending = prismaUser!.eventsAttending.map((i) => i.eventId);
+    const eventIdAttending = prismaUser?.eventsAttending.map((i) => i.eventId);
     // create a new array, with a key in each object attending
     allItems = events.map((item) => {
-      if (eventIdAttending.includes(item.id)) {
+      if (eventIdAttending?.includes(item.id)) {
         return {
           ...item,
           attending: true,
