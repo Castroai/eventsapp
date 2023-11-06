@@ -1,15 +1,8 @@
 import AutocompleteInput from "../AutoCompleteInput";
 
-export const LocationSearchForm = () => {
+export const SearchBar = () => {
   return (
-    <form className="flex gap-4 w-full" method="GET">
-      <div className="input w-full">
-        <input
-          type="text"
-          placeholder="BYOB"
-          className="input input-bordered w-full"
-        />
-      </div>
+    <div className="flex gap-4 w-full">
       <div className="input-group">
         <AutocompleteInput />
         <button className="btn btn-square">
@@ -29,6 +22,6 @@ export const LocationSearchForm = () => {
           </svg>
         </button>
       </div>
-    </form>
+    </div>
   );
 };

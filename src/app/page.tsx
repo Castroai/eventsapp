@@ -1,10 +1,11 @@
-import { LocationSearchForm } from "./components/SearchBar";
+import { SearchBar } from "./components/SearchBar";
 import { EventsGrid } from "./components/EventsGrid";
 import { Suspense } from "react";
 import { MainLayout } from "./components/Layouts/MainLayout";
 import Skeleton from "./components/EventsGrid/skeleteon";
 import Await from "./components/EventsGrid/await";
 import { findClosestEvents } from "./lib/geo";
+import { FilterBox } from "./components/FilterBox";
 
 interface HomeProps {
   params: { slug: string };
@@ -38,15 +39,23 @@ export default async function Home({
         <div className="h-full flex flex-col gap-5 p-4">
           <div>
             <div className="flex items-center gap-2">
-              <h1>Search For Events Near You</h1>
+              <h1 className="text-lg font-semibold">
+                Search For Events Near You
+              </h1>
             </div>
-            <LocationSearchForm />
           </div>
-          <Suspense fallback={<Skeleton />}>
-            <Await promise={items}>
-              {(events) => <EventsGrid allItems={events} />}
-            </Await>
-          </Suspense>
+          <div className="flex gap-2">
+            <div className="w-1/3">
+              <FilterBox />
+            </div>
+            <div className="w-full">
+              <Suspense fallback={<Skeleton />}>
+                <Await promise={items}>
+                  {(events) => <EventsGrid allItems={events} />}
+                </Await>
+              </Suspense>
+            </div>
+          </div>
         </div>
       </div>
     </MainLayout>

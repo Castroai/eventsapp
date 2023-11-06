@@ -7,7 +7,7 @@ import { Event } from "@prisma/client";
 
 export const EventsGrid = async ({ allItems }: { allItems: Event[] }) => {
   return (
-    <div className="grid md:grid-cols-4 gap-4  ">
+    <div className="grid md:grid-cols-3 gap-4  ">
       {allItems.map((i, index) => {
         return <EventCard key={i.id} {...i} />;
       })}

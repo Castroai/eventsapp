@@ -8,7 +8,7 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
       <header>
         <DefaultNavbar />
       </header>
-      <main className="flex-1">{children}</main>
+      <main className="flex">{children}</main>
       <div className="bg-neutral">
         <DefaultFooter />
       </div>
