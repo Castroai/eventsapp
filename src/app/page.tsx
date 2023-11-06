@@ -17,6 +17,12 @@ export default async function Home({
   searchParams,
 }: Readonly<HomeProps>) {
   let location;
+  const minPrice =
+    typeof searchParams.minPrice === "string"
+      ? parseFloat(searchParams.minPrice)
+      : undefined;
+  const address =
+    typeof searchParams.location === "string" ? location : undefined;
   const latitude =
     typeof searchParams.latitude === "string"
       ? parseFloat(searchParams.latitude)
@@ -46,7 +52,7 @@ export default async function Home({
           </div>
           <div className="flex gap-2">
             <div className="w-1/3">
-              <FilterBox />
+              <FilterBox minPrice={minPrice} address={address} />
             </div>
             <div className="w-full">
               <Suspense fallback={<Skeleton />}>

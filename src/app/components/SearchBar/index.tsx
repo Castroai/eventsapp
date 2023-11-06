@@ -1,10 +1,10 @@
 import AutocompleteInput from "../AutoCompleteInput";
 
-export const SearchBar = () => {
+export const SearchBar = ({ address }: { address?: string }) => {
   return (
     <div className="flex gap-4 w-full">
       <div className="input-group">
-        <AutocompleteInput />
+        <AutocompleteInput address={address} />
         <button className="btn btn-square">
           <svg
             xmlns="http://www.w3.org/2000/svg"
