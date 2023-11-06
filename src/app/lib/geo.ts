@@ -6,12 +6,12 @@ interface Coordinates {
   long: number;
 }
 
-interface A extends Event {
+interface EventsWithDistance extends Event {
   distance: number;
 }
 export async function findClosestEvents(
   target?: Coordinates
-): Promise<A[] | Event[]> {
+): Promise<EventsWithDistance[] | Event[]> {
   const allEvents = await prisma.event.findMany();
   if (target) {
     const eventsWithDistance = allEvents.map((event) => {
