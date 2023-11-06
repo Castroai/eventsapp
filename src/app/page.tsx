@@ -1,4 +1,3 @@
-import { SearchBar } from "./components/SearchBar";
 import { EventsGrid } from "./components/EventsGrid";
 import { Suspense } from "react";
 import { MainLayout } from "./components/Layouts/MainLayout";
@@ -22,7 +21,9 @@ export default async function Home({
       ? parseFloat(searchParams.minPrice)
       : undefined;
   const address =
-    typeof searchParams.location === "string" ? location : undefined;
+    typeof searchParams.location === "string"
+      ? searchParams.location
+      : undefined;
   const latitude =
     typeof searchParams.latitude === "string"
       ? parseFloat(searchParams.latitude)

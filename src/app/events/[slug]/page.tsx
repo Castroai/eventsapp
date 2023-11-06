@@ -2,7 +2,9 @@ import { MainLayout } from "@/app/components/Layouts/MainLayout";
 import prisma from "@/app/lib/db";
 import Image from "next/image";
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({
+  params,
+}: Readonly<{ params: { slug: string } }>) {
   const data = await prisma.event.findUnique({
     where: {
       slug: params.slug,

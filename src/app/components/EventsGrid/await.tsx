@@ -13,7 +13,7 @@ export default async function Await<T>({
   let allItems;
   const session = await getServerSession(authOptions);
   let events = await promise;
-  if (session && session.user) {
+  if (session?.user) {
     const prismaUser = await prisma.user.findUnique({
       where: {
         id: session.user.id,

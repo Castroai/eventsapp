@@ -2,7 +2,7 @@
 import { options } from "@/app/lib/gplaces";
 import { useEffect, useRef } from "react";
 const AutocompleteInput = ({ address }: { address?: string }) => {
-  // TODO: use the address to autopopulate the google search input
+  console.log(address);
   const autoCompleteRef = useRef<google.maps.places.Autocomplete>();
   const inputRef = useRef(
     document.getElementById("autocomplete-input") as HTMLInputElement
@@ -15,10 +15,14 @@ const AutocompleteInput = ({ address }: { address?: string }) => {
   );
   useEffect(() => {
     // Set the Ref to the autocomplete instance
+    if (address) {
+      inputRef.current.value = address;
+    }
     autoCompleteRef.current = new window.google.maps.places.Autocomplete(
       inputRef.current,
       options
     );
+
     // Reference the current value
     const autocomplete = autoCompleteRef.current;
     // Add a listener

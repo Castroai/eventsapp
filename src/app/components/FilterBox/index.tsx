@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import { SearchBar } from "../SearchBar";
 
 export const FilterBox = ({
@@ -7,6 +9,7 @@ export const FilterBox = ({
   minPrice?: number;
   address?: string;
 }) => {
+  const [price, setPrice] = useState(minPrice ?? 0);
   return (
     <form className="flex flex-col gap-2 p-4 rounded-md border" method="GET">
       <div className="form-control w-full max-w-xs">
@@ -17,13 +20,14 @@ export const FilterBox = ({
       </div>
       <div className="form-control w-full max-w-xs">
         <label className="label">
-          <span className="label-text">Price Range</span>
+          <span className="label-text">Price Range {price}</span>
         </label>
         <input
           id="range"
           type="range"
           min={0}
-          value={minPrice}
+          value={price}
+          onChange={(e) => setPrice(parseFloat(e.target.value))}
           max="100"
           className="range range-primary"
           name="minPrice"
