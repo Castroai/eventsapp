@@ -3,12 +3,18 @@ import prisma from "@/app/lib/db";
 import { Event } from "@prisma/client";
 import { getServerSession } from "next-auth";
 
+export type ItemsWithCount = Event & {
+  _count: {
+    comments: number;
+  };
+};
+
 export default async function Await<T>({
   promise,
   children,
 }: {
-  promise: Promise<Event[]>;
-  children: (value: Event[]) => JSX.Element;
+  promise: Promise<ItemsWithCount[]>;
+  children: (value: ItemsWithCount[]) => JSX.Element;
 }) {
   let allItems;
   const session = await getServerSession(authOptions);
