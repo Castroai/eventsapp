@@ -8,13 +8,9 @@ export const LikeButton = ({
   eventId: number;
   attending?: boolean;
 }) => {
+  const likeEventWithId = likeEvent.bind(null, eventId);
   return (
-    <form
-      action={async (e) => {
-        e.append("eventId", `${eventId}`);
-        await likeEvent(e);
-      }}
-    >
+    <form action={likeEventWithId}>
       {attending === true ? (
         <button
           onClick={(e) => {

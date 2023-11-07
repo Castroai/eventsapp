@@ -1,5 +1,4 @@
 import { EventCard } from "../EventCard";
-import { Event } from "@prisma/client";
 import { ItemsWithCount } from "./await";
 
 export const EventsGrid = async ({

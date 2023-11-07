@@ -1,4 +1,3 @@
-import { Event } from "@prisma/client";
 import prisma from "./db";
 
 interface Coordinates {
@@ -6,14 +5,11 @@ interface Coordinates {
   long: number;
 }
 
-interface EventsWithDistance extends Event {
-  distance: number;
-}
 export async function findClosestEvents(target?: Coordinates) {
   const allEvents = await prisma.event.findMany({
     include: {
       _count: {
-        select: { comments: true },
+        select: { comments: true, users: true, tickets: true },
       },
     },
   });

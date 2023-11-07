@@ -6,6 +6,8 @@ import { getServerSession } from "next-auth";
 export type ItemsWithCount = Event & {
   _count: {
     comments: number;
+    users: number;
+    tickets: number;
   };
 };
 

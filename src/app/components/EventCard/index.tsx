@@ -3,13 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { LikeButton } from "../LikeButton";
 import { AiOutlineComment } from "react-icons/ai";
-export const EventCard = (
-  i: Event & { attending?: boolean } & {
-    _count: {
-      comments: number;
-    };
-  }
-) => {
+import { ItemsWithCount } from "../EventsGrid/await";
+export const EventCard = (i: ItemsWithCount & { attending?: boolean }) => {
   const date = new Date(i.date);
 
   return (
@@ -30,7 +25,9 @@ export const EventCard = (
         <p className="text-gray-600">{i.location}</p>
       </div>
       <div className="flex items-center justify-between">
-        <LikeButton eventId={i.id} attending={i.attending} />
+        <div className="flex gap-2">
+          <LikeButton eventId={i.id} attending={i.attending} /> {i._count.users}
+        </div>
         <div className="flex gap-2">
           <AiOutlineComment className="w-5 h-5" /> {i._count.comments}
         </div>
