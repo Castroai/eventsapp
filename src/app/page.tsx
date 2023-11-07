@@ -39,17 +39,26 @@ export default async function Home({
     };
   }
   const items = findClosestEvents(location);
-
+  console.log(searchParams);
   return (
     <MainLayout>
       <div className="flex flex-col gap-5 h-full justify-between dark:bg-current container mx-auto">
         <div className="h-full flex flex-col gap-5 p-4">
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg font-semibold">
-                Search For Events Near You
-              </h1>
-            </div>
+            {Object.values(searchParams).length === 0 ? (
+              <div className="flex items-center gap-2">
+                <h1 className="text-lg font-semibold">
+                  Search For Events Near You
+                </h1>
+              </div>
+            ) : (
+              <>
+                <p className="text-lg font-semibold">
+                  Showing results for events near:{" "}
+                  <p className="underline">{address}</p>
+                </p>
+              </>
+            )}
           </div>
           <div className="flex gap-2">
             <div className="w-1/3">

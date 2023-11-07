@@ -1,11 +1,14 @@
 import { CommentBox } from "@/app/components/CommentBox";
 import { MainLayout } from "@/app/components/Layouts/MainLayout";
+import { authOptions } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
+import { getServerSession } from "next-auth";
 import Image from "next/image";
 
 export default async function Page({
   params,
 }: Readonly<{ params: { slug: string } }>) {
+  const session = await getServerSession(authOptions);
   const data = await prisma.event.findUnique({
     where: {
       slug: params.slug,
@@ -57,7 +60,7 @@ export default async function Page({
               </form>
             )}
           </ul>
-          <CommentBox eventId={data.id} />
+          {session?.user && <CommentBox eventId={data.id} />}
           <div>
             <ul>
               <li>

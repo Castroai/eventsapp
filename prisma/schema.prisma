@@ -51,6 +51,7 @@ model User {
   eventsAttending UsersAttendingEvents[]
   stripeAccountId String?
   tickets         TicketUser[]
+  Comment         Comment[]
 }
 
 model VerificationToken {
@@ -134,4 +135,6 @@ model Comment {
   updatedAt DateTime @updatedAt
   eventId   Int
   event     Event    @relation(fields: [eventId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
 }

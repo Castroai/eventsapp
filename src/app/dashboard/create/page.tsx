@@ -1,15 +1,21 @@
-"use server";
+"use client";
 import DashboardLayout from "@/app/components/Layouts/DashboardLayout";
 import AutocompleteInput from "@/app/components/AutoCompleteInput";
 import { createNewEvent } from "@/app/actions";
 import { EditorComponent } from "@/app/components/WYSIWYGEditor";
 import { EventCreateButton } from "@/app/components/EventCreateButton";
-
+//@ts-ignore
+import { experimental_useFormState as useFormState } from "react-dom";
+const initialState = {
+  message: null,
+};
 const CreateEventPage = () => {
+  const [state, formAction] = useFormState(createNewEvent, initialState);
+
   return (
     <DashboardLayout>
       <div className="card w-3/4 bg-base-100 shadow-xl">
-        <form action={createNewEvent} className="card-body	">
+        <form action={formAction} className="card-body	">
           <div className="max-w-md" id="fileUpload">
             <div className="mb-2 block">
               <label htmlFor="file" />
@@ -51,6 +57,7 @@ const CreateEventPage = () => {
               className="input input-bordered w-full max-w-xs"
               type="date"
               id="date"
+              required
               name="date"
               title="Time & Date"
             />
@@ -66,13 +73,6 @@ const CreateEventPage = () => {
           </div>
           <div className="flex gap-4">
             <div>
-              {/* <button
-                type="submit"
-                className="flex w-full btn btn-primary"
-                color="light"
-              >
-                Submit
-              </button> */}
               <EventCreateButton />
             </div>
             <div>
@@ -83,6 +83,8 @@ const CreateEventPage = () => {
               >
                 Save
               </button>
+              {/* Style this message */}
+              <p>{state?.message}</p>
             </div>
           </div>
         </form>

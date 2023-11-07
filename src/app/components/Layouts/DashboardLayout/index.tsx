@@ -26,10 +26,13 @@ export default function DashboardLayout({
         <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
           {/* Sidebar content here */}
           <li>
-            <Link href="/dashboard">Events</Link>
+            <Link href="/dashboard">Manage Events</Link>
           </li>
           <li>
-            <Link href="/dashboard/account">Account</Link>
+            <Link href="/dashboard/create">Create Event</Link>
+          </li>
+          <li>
+            <Link href="/dashboard/account">My Account</Link>
           </li>
         </ul>
       </div>

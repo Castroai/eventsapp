@@ -10,8 +10,7 @@ import { stripe } from "./lib/stripe";
 import { Event, Prisma } from "@prisma/client";
 import { uploadImage } from "./lib/gstorage";
 
-export const createNewEvent = async (formData: FormData): Promise<Event> => {
-  console.log(formData);
+export const createNewEvent = async (prevState: any, formData: FormData) => {
   const session = await getServerSession(authOptions);
   const schema = z.object({
     eventName: z.string().min(1),
@@ -30,12 +29,8 @@ export const createNewEvent = async (formData: FormData): Promise<Event> => {
     description: formData.get("description"),
   });
   if (session?.user) {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: session.user.id,
-      },
-    });
     const createSlug = (name: string) => {
+      // TODO: Better Slug
       // Convert the name to lowercase and replace spaces with hyphens
       const slug = name.toLowerCase().replace(/\s+/g, "-");
       return slug;
@@ -48,7 +43,7 @@ export const createNewEvent = async (formData: FormData): Promise<Event> => {
     const slug = createSlug(data.eventName);
     const query: Prisma.EventCreateArgs = {
       data: {
-        organizerId: user!.id,
+        organizerId: session.user.id,
         date: new Date(data.date),
         description: data.description,
         eventName: data.eventName,
@@ -59,10 +54,14 @@ export const createNewEvent = async (formData: FormData): Promise<Event> => {
         slug: slug,
       },
     };
-    return await prisma.event.create(query);
-  } else {
-    throw new Error("No User");
+    try {
+      await prisma.event.create(query);
+    } catch (error) {
+      const err = error as Error;
+      return { message: err.message };
+    }
   }
+  redirect("/dashboard");
 };
 
 export const fetchOrCreateStripeConnectLink = async (formData: FormData) => {
@@ -123,6 +122,7 @@ export const commentOnEvent = async (formData: FormData) => {
       data: {
         text: data.comment,
         eventId: parseInt(data.eventId),
+        userId: session.user.id,
       },
     });
     revalidatePath("/");
