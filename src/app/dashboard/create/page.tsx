@@ -17,6 +17,7 @@ const CreateEventPage = () => {
               <label />
             </div>
             <input
+              name="file"
               type="file"
               className="file-input file-input-bordered w-full max-w-xs"
               id="file"
