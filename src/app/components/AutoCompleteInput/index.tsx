@@ -13,10 +13,23 @@ const AutocompleteInput = ({ address }: { address?: string }) => {
     document.getElementById("longitude") as HTMLInputElement
   );
   useEffect(() => {
-    // Set the Ref to the autocomplete instance
     if (address) {
       inputRef.current.value = address;
+      // Use the Geocoding API to convert address to LatLng
+      const geocoder = new window.google.maps.Geocoder();
+      geocoder.geocode({ address: address }, (results, status) => {
+        if (status === "OK" && results && results[0].geometry) {
+          const lat = results[0].geometry.location.lat();
+          const lng = results[0].geometry.location.lng();
+          latRef.current.value = lat.toString();
+          longRef.current.value = lng.toString();
+        } else {
+          // Handle error or provide default values
+          console.error("Geocoding failed for the provided address.");
+        }
+      });
     }
+    // Set the Ref to the autocomplete instance
     autoCompleteRef.current = new window.google.maps.places.Autocomplete(
       inputRef.current,
       options
