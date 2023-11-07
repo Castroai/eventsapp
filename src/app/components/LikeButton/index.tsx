@@ -1,6 +1,6 @@
 "use client";
 import { likeEvent } from "@/app/actions";
-import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 export const LikeButton = ({
   eventId,
   attending,
@@ -22,7 +22,7 @@ export const LikeButton = ({
           }}
           type="submit"
         >
-          <AiFillHeart />
+          <AiFillLike className="w-5 h-5" />
         </button>
       ) : (
         <button
@@ -31,7 +31,7 @@ export const LikeButton = ({
           }}
           type="submit"
         >
-          <AiOutlineHeart />
+          <AiOutlineLike className="w-5 h-5" />
         </button>
       )}
     </form>

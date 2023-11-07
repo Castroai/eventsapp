@@ -9,10 +9,14 @@ interface Coordinates {
 interface EventsWithDistance extends Event {
   distance: number;
 }
-export async function findClosestEvents(
-  target?: Coordinates
-): Promise<EventsWithDistance[] | Event[]> {
-  const allEvents = await prisma.event.findMany();
+export async function findClosestEvents(target?: Coordinates) {
+  const allEvents = await prisma.event.findMany({
+    include: {
+      _count: {
+        select: { comments: true },
+      },
+    },
+  });
   if (target) {
     const eventsWithDistance = allEvents.map((event) => {
       const distance = calculateDistance(target, {
