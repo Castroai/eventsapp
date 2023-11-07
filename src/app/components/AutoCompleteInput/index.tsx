@@ -39,7 +39,7 @@ const AutocompleteInput = ({ address }: { address?: string }) => {
     return () => {
       window.google.maps.event.clearInstanceListeners(autocomplete);
     };
-  }, []);
+  }, [address]);
 
   return (
     <>

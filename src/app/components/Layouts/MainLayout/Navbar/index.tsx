@@ -1,9 +1,9 @@
-import { SearchBar } from "@/app/components/SearchBar";
+import { SignInBUtton } from "@/app/components/SignInButton";
+import { SignOutButton } from "@/app/components/SignoutButton";
 import { authOptions } from "@/app/lib/auth";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import { AiOutlineLogin } from "react-icons/ai";
 export default async function DefaultNavbar() {
   const session = await getServerSession(authOptions);
   return (
@@ -49,7 +49,8 @@ export default async function DefaultNavbar() {
                   <a>Settings</a>
                 </li>
                 <li>
-                  <Link href={"/api/auth/signout"}>Logout</Link>
+                  {/* <Link href={"/api/auth/signout"}>Logout</Link> */}
+                  <SignOutButton />
                 </li>
               </ul>
             </div>
@@ -57,13 +58,7 @@ export default async function DefaultNavbar() {
         ) : (
           <>
             <div className="">
-              <Link
-                href={"/api/auth/signin"}
-                className="flex gap-2 items-center"
-              >
-                <span>Sign In</span>
-                <AiOutlineLogin className="w-5 h-5" />
-              </Link>
+              <SignInBUtton />
             </div>
           </>
         )}

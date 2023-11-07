@@ -1,15 +1,10 @@
 "use client";
 import { Editor } from "@tinymce/tinymce-react";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Editor as TinyMCEEditor } from "tinymce";
 export const EditorComponent = () => {
   const editorRef = useRef<TinyMCEEditor>();
 
-  useEffect(() => {
-    if (editorRef.current) {
-      console.log(editorRef.current.getContent());
-    }
-  }, []);
   return (
     <>
       <Editor
