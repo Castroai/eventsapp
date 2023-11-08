@@ -7,7 +7,7 @@ import { z } from "zod";
 import { authOptions } from "./lib/auth";
 import prisma from "./lib/db";
 import { stripe } from "./lib/stripe";
-import { Event, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { uploadImage } from "./lib/gstorage";
 
 export const createNewEvent = async (prevState: any, formData: FormData) => {
