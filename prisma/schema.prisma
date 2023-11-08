@@ -52,6 +52,7 @@ model User {
   stripeAccountId String?
   tickets         TicketUser[]
   Comment         Comment[]
+  Venue           Venue[]
 }
 
 model VerificationToken {
@@ -75,23 +76,24 @@ enum EventStatus {
 }
 
 model Event {
-  id          Int                    @id @default(autoincrement())
-  eventName   String
-  description String
-  date        DateTime
-  location    String
-  lat         Float
-  long        Float
-  status      EventStatus            @default(PUBLISHED)
-  organizer   User                   @relation(fields: [organizerId], references: [id])
-  organizerId String
-  users       UsersAttendingEvents[]
-  category    EventCategory?         @relation(fields: [categoryId], references: [id])
-  categoryId  Int?
-  imgUrl      String?                @default("https://placehold.co/600x400.png")
-  slug        String                 @unique
-  tickets     Ticket[]
-  comments    Comment[]
+  id           Int                    @id @default(autoincrement())
+  eventName    String                 @unique
+  description  String?
+  date         DateTime?
+  location     String?
+  lat          Float?
+  long         Float?
+  status       EventStatus            @default(PUBLISHED)
+  organizer    User                   @relation(fields: [organizerId], references: [id])
+  organizerId  String
+  users        UsersAttendingEvents[]
+  category     EventCategory?         @relation(fields: [categoryId], references: [id])
+  categoryId   Int?
+  imgUrl       String?                @default("https://placehold.co/600x400.png")
+  slug         String                 @unique
+  tickets      Ticket[]
+  comments     Comment[]
+  progressStep Int
 }
 
 model Ticket {
@@ -137,4 +139,12 @@ model Comment {
   event     Event    @relation(fields: [eventId], references: [id])
   user      User     @relation(fields: [userId], references: [id])
   userId    String
+}
+
+model Venue {
+  id      Int    @id @default(autoincrement())
+  name    String
+  address String
+  owner   User   @relation(fields: [userId], references: [id])
+  userId  String
 }
