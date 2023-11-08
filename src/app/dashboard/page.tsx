@@ -1,9 +1,8 @@
 import DashboardLayout from "../components/Layouts/DashboardLayout";
-import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../lib/auth";
 import prisma from "../lib/db";
-import { Prisma, User, Comment, Event } from "@prisma/client";
+import { User, Comment, Event } from "@prisma/client";
 
 const getEventsWithCommentsUsersAndCount = async (
   userId: string | undefined

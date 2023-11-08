@@ -1,6 +1,6 @@
 export default function DefaultFooter() {
   return (
-    <footer className="footer p-10 flex justify-between text-neutral-content  container mx-auto">
+    <footer className="footer p-10 flex justify-between container mx-auto ">
       <nav>
         <header className="footer-title">Services</header>
         <a className="link link-hover">Branding</a>

@@ -7,7 +7,7 @@ export const EventsGrid = async ({
   allItems: ItemsWithCount[];
 }) => {
   return (
-    <div className="grid md:grid-cols-3 gap-4  ">
+    <div className="grid md:grid-cols-3 gap-4 ">
       {allItems.map((i, index) => {
         return <EventCard key={i.id} {...i} />;
       })}

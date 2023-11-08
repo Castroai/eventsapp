@@ -8,8 +8,8 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
       <header>
         <DefaultNavbar />
       </header>
-      <main className="flex">{children}</main>
-      <div className="bg-neutral">
+      <main className="flex flex-1 h-full">{children}</main>
+      <div className=" bg-neutral text-neutral-content">
         <DefaultFooter />
       </div>
     </>

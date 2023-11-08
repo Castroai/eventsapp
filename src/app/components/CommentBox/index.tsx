@@ -1,7 +1,6 @@
 import { commentOnEvent } from "@/app/actions";
 
 export const CommentBox = ({ eventId }: { eventId: number }) => {
-  console.log(eventId);
   const submitHandler = async (formdata: FormData) => {
     "use server";
     formdata.append("eventId", `${eventId}`);
