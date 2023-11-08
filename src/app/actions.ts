@@ -14,9 +14,9 @@ export const createNewEvent = async (prevState: any, formData: FormData) => {
   const session = await getServerSession(authOptions);
   const schema = z.object({
     eventName: z.string().min(1),
-    location: z.string().min(1),
-    latitude: z.string().min(1),
-    longitude: z.string().min(1),
+    location: z.string(),
+    latitude: z.string(),
+    longitude: z.string(),
     date: z.string().min(1),
     description: z.string().min(1),
   });
