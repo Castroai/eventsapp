@@ -36,10 +36,12 @@ export default async function Page({
             <li>Location : {data.location}</li>
             <li>Hosted by : {data.organizer.name}</li>
             <li>
-              <div
-                className="prose"
-                dangerouslySetInnerHTML={{ __html: data.description }}
-              />
+              {data.description && (
+                <div
+                  className="prose"
+                  dangerouslySetInnerHTML={{ __html: data.description }}
+                />
+              )}
             </li>
             {data.imgUrl && (
               <li>
