@@ -4,7 +4,7 @@ import { LikeButton } from "../LikeButton";
 import { AiOutlineComment } from "react-icons/ai";
 import { ItemsWithCount } from "../EventsGrid/await";
 export const EventCard = (i: ItemsWithCount & { attending?: boolean }) => {
-  const date = new Date(i.date);
+  const date = i.date && new Date(i.date);
 
   return (
     <Link href={`/events/${i.slug}`} className="rounded-lg p-4 shadow-md">
@@ -20,7 +20,7 @@ export const EventCard = (i: ItemsWithCount & { attending?: boolean }) => {
       </div>
       <div className="mt-4">
         <h2 className="text-lg font-semibold">{i.eventName}</h2>
-        <p className="text-gray-600">{date.toDateString()}</p>
+        <p className="text-gray-600">{date && date.toDateString()}</p>
         <p className="text-gray-600">{i.location}</p>
       </div>
       <div className="flex items-center justify-between">
