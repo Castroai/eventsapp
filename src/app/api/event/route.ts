@@ -46,8 +46,7 @@ export async function POST(request: Request) {
       try {
         await prisma.event.create(query);
       } catch (error) {
-        const err = error as Error;
-        return { message: err.message };
+        return NextResponse.json({ error }, { status: 500 });
       }
     }
     return NextResponse.json({ status: "good" });
