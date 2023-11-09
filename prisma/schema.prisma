@@ -83,7 +83,7 @@ model Event {
   location     String?
   lat          Float?
   long         Float?
-  status       EventStatus            @default(PUBLISHED)
+  status       EventStatus            @default(DRAFT)
   organizer    User                   @relation(fields: [organizerId], references: [id])
   organizerId  String
   users        UsersAttendingEvents[]
@@ -93,7 +93,7 @@ model Event {
   slug         String                 @unique
   tickets      Ticket[]
   comments     Comment[]
-  progressStep Int
+  progressStep Int?
 }
 
 model Ticket {

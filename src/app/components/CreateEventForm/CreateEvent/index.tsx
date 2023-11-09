@@ -1,6 +1,58 @@
 import { EditorComponent } from "../../WYSIWYGEditor";
 import AutocompleteInput from "../../AutoCompleteInput";
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+
+const EventNameChecker = () => {
+  const [eventName, setEventName] = useState<string>();
+  const [isAvailable, setIsAvailable] = useState<boolean>(true);
+
+  const handler = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEventName(value);
+  };
+
+  const checkEventAvailability = async (name: string) => {
+    try {
+      const formData = new FormData();
+      formData.set("eventName", name);
+      const response = await fetch(`/api/event/available`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      setIsAvailable(data.isAvailable);
+    } catch (error) {
+      console.error("Error checking event availability:", error);
+    }
+  };
+  useEffect(() => {
+    if (eventName) {
+      checkEventAvailability(eventName);
+    } else {
+      setIsAvailable(true); // Reset the availability status if eventName is empty
+    }
+  }, [eventName]);
+
+  return (
+    <div className="form-control">
+      <input
+        name="eventName"
+        id="eventName"
+        type="text"
+        required
+        value={eventName}
+        onChange={handler}
+        placeholder="Event Name"
+        className="input input-bordered"
+      />
+      {!isAvailable && (
+        <p className="error-message">
+          Event name is already taken. Please choose another one.
+        </p>
+      )}
+    </div>
+  );
+};
 
 export const CreateEvent = ({ next }: { next: () => void }) => {
   const [submitting, setSubmitting] = useState(false);
@@ -21,6 +73,7 @@ export const CreateEvent = ({ next }: { next: () => void }) => {
       next();
     }
   };
+
   return (
     <div className="card  bg-base-100 shadow-xl">
       <form className="card-body" action={onSubmit}>
@@ -36,7 +89,7 @@ export const CreateEvent = ({ next }: { next: () => void }) => {
             id="file"
           />
         </div>
-        <div>
+        {/* <div>
           <div className="mb-2 block">
             <label htmlFor="eventName">Event Name</label>
           </div>
@@ -48,7 +101,8 @@ export const CreateEvent = ({ next }: { next: () => void }) => {
             required
             type="text"
           />
-        </div>
+        </div> */}
+        <EventNameChecker />
         <div>
           <div className="mb-2 block">
             <label htmlFor="autocomplete">Location</label>
