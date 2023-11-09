@@ -39,7 +39,6 @@ export default async function Home({
     };
   }
   const items = findClosestEvents(location);
-  console.log(searchParams);
   return (
     <MainLayout>
       <div className="flex flex-col gap-5 h-full justify-between dark:bg-current container mx-auto">
