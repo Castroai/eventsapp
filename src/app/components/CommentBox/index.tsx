@@ -1,13 +1,9 @@
 import { commentOnEvent } from "@/app/actions";
 
 export const CommentBox = ({ eventId }: { eventId: number }) => {
-  const submitHandler = async (formdata: FormData) => {
-    "use server";
-    formdata.append("eventId", `${eventId}`);
-    return commentOnEvent(formdata);
-  };
+  const commentOnEventWithId = commentOnEvent.bind(null, eventId);
   return (
-    <form action={submitHandler}>
+    <form action={commentOnEventWithId}>
       <textarea
         className="textarea textarea-bordered"
         name="comment"

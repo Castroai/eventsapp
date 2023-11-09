@@ -106,22 +106,21 @@ export const fetchOrCreateStripeConnectLink = async (formData: FormData) => {
   }
 };
 
-export const commentOnEvent = async (formData: FormData) => {
+export const commentOnEvent = async (eventId: number, formData: FormData) => {
   console.log(formData);
   const schema = z.object({
     comment: z.string().min(1),
-    eventId: z.string().min(1),
   });
   const data = schema.parse({
     comment: formData.get("comment"),
-    eventId: formData.get("eventId"),
+    eventId: eventId,
   });
   const session = await getServerSession(authOptions);
   if (session?.user) {
     const res = await prisma.comment.create({
       data: {
         text: data.comment,
-        eventId: parseInt(data.eventId),
+        eventId: eventId,
         userId: session.user.id,
       },
     });
@@ -136,7 +135,6 @@ export const likeEvent = async (eventId: number, formData: FormData) => {
   console.log(`eventId`, eventId);
   if (session?.user) {
     console.log(`user`, session.user.id);
-
     const existingAttendance = await prisma.usersAttendingEvents.findUnique({
       where: {
         eventId_userId: {
@@ -157,7 +155,6 @@ export const likeEvent = async (eventId: number, formData: FormData) => {
       });
       console.log("User has unattended the event.");
       revalidatePath("/");
-
       return {
         attending: false,
       };
