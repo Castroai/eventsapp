@@ -8,7 +8,7 @@ import { ZodError, z } from "zod";
 const schema = z.object({
   eventName: z.string().min(1),
   description: z.string().min(1),
-  progressStep: z.number(),
+  progressStep: z.string(),
 });
 const createSlug = (name: string) => {
   // TODO: Better Slug
@@ -24,6 +24,7 @@ export async function POST(request: Request) {
     const data = schema.parse({
       eventName: formData.get("eventName"),
       progressStep: formData.get("progressStep"),
+      description: formData.get("description"),
     });
     if (session?.user) {
       let uploadUrl: string | undefined;
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
           eventName: data.eventName,
           description: data.description,
           imgUrl: uploadUrl,
-          progressStep: data.progressStep,
+          progressStep: parseInt(data.progressStep),
         },
       };
       try {
