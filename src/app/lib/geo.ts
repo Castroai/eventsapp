@@ -7,6 +7,11 @@ interface Coordinates {
 
 export async function findClosestEvents(target?: Coordinates) {
   const allEvents = await prisma.event.findMany({
+    where: {
+      status: {
+        equals: "PUBLISHED",
+      },
+    },
     include: {
       _count: {
         select: { comments: true, users: true, tickets: true },
@@ -16,8 +21,8 @@ export async function findClosestEvents(target?: Coordinates) {
   if (target) {
     const eventsWithDistance = allEvents.map((event) => {
       const distance = calculateDistance(target, {
-        lat: event.lat,
-        long: event.long,
+        lat: event.lat ? event.lat : 0,
+        long: event.long ? event.long : 0,
       });
       return { ...event, distance };
     });
