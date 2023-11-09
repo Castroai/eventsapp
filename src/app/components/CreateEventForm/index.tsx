@@ -1,16 +1,8 @@
 "use client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { CreateEvent } from "./CreateEvent";
+import { CreateTicket } from "./CreateTicket";
 
-const CreateTickets = ({
-  next,
-  back,
-}: {
-  next: () => void;
-  back: () => void;
-}) => {
-  return <div>Create Tickets Form</div>;
-};
 const FindVenueForm = () => {
   return <div>Find Event Form</div>;
 };
@@ -36,7 +28,7 @@ const MainForm = () => {
     ({ next, back }: { next: () => void; back: () => void }) => JSX.Element
   > = {
     1: ({ next }) => CreateEvent({ next }),
-    2: ({ next, back }) => CreateTickets({ next, back }),
+    2: ({ next, back }) => CreateTicket({ next, back }),
     3: FindVenueForm,
     4: ReviewAndCompletForm,
   };
