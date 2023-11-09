@@ -4,7 +4,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 const EventNameChecker = () => {
   const [eventName, setEventName] = useState<string>();
-  const [isAvailable, setIsAvailable] = useState<boolean>(true);
+  const [isAvailable, setIsAvailable] = useState<boolean>();
 
   const handler = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -29,7 +29,7 @@ const EventNameChecker = () => {
     if (eventName) {
       checkEventAvailability(eventName);
     } else {
-      setIsAvailable(true); // Reset the availability status if eventName is empty
+      setIsAvailable(undefined);
     }
   }, [eventName]);
 
@@ -45,21 +45,29 @@ const EventNameChecker = () => {
         placeholder="Event Name"
         className="input input-bordered"
       />
-      {!isAvailable && (
-        <p className="error-message">
+      {isAvailable === false ? (
+        <p className="text-red-300">
           Event name is already taken. Please choose another one.
         </p>
-      )}
+      ) : isAvailable === true ? (
+        <p className="text-green-300">Event name is Available.</p>
+      ) : null}
     </div>
   );
 };
 
-export const CreateEvent = ({ next }: { next: () => void }) => {
+export const CreateEvent = ({
+  next,
+  isNextButtonDisabled,
+}: {
+  next: () => void;
+  isNextButtonDisabled: boolean;
+}) => {
   const [submitting, setSubmitting] = useState(false);
-
   const [errors, setErrors] = useState<[{ [key: string]: string }]>();
   const onSubmit = async (formData: FormData) => {
     setSubmitting(true);
+    formData.set("progressStep", "1");
     const response = await fetch("/api/event", {
       method: "POST",
       body: formData,
@@ -89,19 +97,6 @@ export const CreateEvent = ({ next }: { next: () => void }) => {
             id="file"
           />
         </div>
-        {/* <div>
-          <div className="mb-2 block">
-            <label htmlFor="eventName">Event Name</label>
-          </div>
-          <input
-            className="input input-bordered w-full max-w-xs"
-            name="eventName"
-            id="eventName"
-            placeholder="Dance till the sun comes out"
-            required
-            type="text"
-          />
-        </div> */}
         <EventNameChecker />
         <div>
           <div className="mb-2 block">
@@ -109,7 +104,6 @@ export const CreateEvent = ({ next }: { next: () => void }) => {
           </div>
           <AutocompleteInput />
         </div>
-
         <div>
           <div className="mb-2 block">
             <label htmlFor="date">Time & Date</label>
@@ -118,7 +112,6 @@ export const CreateEvent = ({ next }: { next: () => void }) => {
             className="input input-bordered w-full max-w-xs"
             type="date"
             id="date"
-            required
             name="date"
             title="Time & Date"
           />
@@ -137,13 +130,14 @@ export const CreateEvent = ({ next }: { next: () => void }) => {
             <button
               className="flex w-full btn btn-primary disabled:bg-gray-400"
               type="submit"
+              disabled={isNextButtonDisabled || submitting}
             >
               Submit
             </button>
           </div>
           <div>
             <button
-              className="flex w-full btn btn-secondary"
+              className="flex w-full btn btn-secondary disabled:bg-gray-400"
               color="light"
               type="button"
             >

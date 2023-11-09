@@ -25,9 +25,17 @@ const MainForm = () => {
   const isBackButtonDisabled = current === 1;
   const Steps: Record<
     number,
-    ({ next, back }: { next: () => void; back: () => void }) => JSX.Element
+    ({
+      next,
+      back,
+    }: {
+      next: () => void;
+      back: () => void;
+      isNextButtonDisabled: boolean;
+    }) => JSX.Element
   > = {
-    1: ({ next }) => CreateEvent({ next }),
+    1: ({ next, isNextButtonDisabled }) =>
+      CreateEvent({ next, isNextButtonDisabled }),
     2: ({ next, back }) => CreateTicket({ next, back }),
     3: FindVenueForm,
     4: ReviewAndCompletForm,
@@ -53,7 +61,11 @@ const MainForm = () => {
         </ul>
       </div>
       <div className="w-full p-4">
-        <Component next={Next} back={Back} />
+        <Component
+          next={Next}
+          back={Back}
+          isNextButtonDisabled={isNextButtonDisabled}
+        />
       </div>
     </div>
   );

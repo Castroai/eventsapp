@@ -62,22 +62,9 @@ const AutocompleteInput = ({ address }: { address?: string }) => {
         name="location"
         id="autocomplete-input"
         placeholder="Location"
-        required
       />
-      <input
-        type="hidden"
-        id="latitude"
-        name="latitude"
-        required
-        ref={latRef}
-      />
-      <input
-        type="hidden"
-        id="longitude"
-        name="longitude"
-        required
-        ref={longRef}
-      />
+      <input type="hidden" id="latitude" name="latitude" ref={latRef} />
+      <input type="hidden" id="longitude" name="longitude" ref={longRef} />
     </>
   );
 };
