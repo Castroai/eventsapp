@@ -9,6 +9,7 @@ const schema = z.object({
   eventName: z.string().min(1),
   description: z.string().min(1),
   progressStep: z.string(),
+  eventId: z.string().optional(),
 });
 const createSlug = (name: string) => {
   // TODO: Better Slug
@@ -46,6 +47,56 @@ export async function POST(request: Request) {
       };
       try {
         await prisma.event.create(query);
+      } catch (error) {
+        return NextResponse.json({ error }, { status: 500 });
+      }
+    }
+    return NextResponse.json({ status: "good" });
+  } catch (error) {
+    const Err = error as ZodError;
+    const obj = Err.errors.map((er) => {
+      return {
+        [`${er.path}`]: er.message,
+      };
+    });
+    console.log();
+    return NextResponse.json(obj, { status: 500 });
+  }
+}
+export async function PUT(request: Request) {
+  const formData = await request.formData();
+  const session = await getServerSession(authOptions);
+  console.log(formData);
+  try {
+    const data = schema.parse({
+      eventName: formData.get("eventName"),
+      progressStep: formData.get("progressStep"),
+      description: formData.get("description"),
+      eventId: formData.get("eventId"),
+    });
+    if (session?.user) {
+      let uploadUrl: string | undefined;
+      if (formData.has("file")) {
+        const file = formData.get("file") as File;
+        uploadUrl = await uploadImage(file);
+      }
+      const slug = createSlug(data.eventName);
+      const query: Prisma.EventUpdateArgs = {
+        where: {
+          id: parseInt(data.eventId as string),
+        },
+        data: {
+          organizerId: session.user.id,
+          slug: slug,
+          eventName: data.eventName,
+          description: data.description,
+          imgUrl: uploadUrl,
+          progressStep: parseInt(data.progressStep),
+          status: "DRAFT",
+        },
+      };
+      try {
+        await prisma.event.update(query);
       } catch (error) {
         return NextResponse.json({ error }, { status: 500 });
       }

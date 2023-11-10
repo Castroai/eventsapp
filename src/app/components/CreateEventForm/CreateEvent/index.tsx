@@ -62,13 +62,13 @@ export const CreateEvent = ({
   };
   const onContinue = async (formData: FormData) => {
     setSubmitting(true);
+    formData.set("eventId", `${eventId}`);
     formData.set("progressStep", "1");
     const response = await fetch("/api/event", {
       method: "PUT",
       body: formData,
     });
     const status = response.status;
-    console.log(status);
     if (status === 500) {
       const error = await response.json();
       setErrors(error.error);
@@ -113,7 +113,10 @@ export const CreateEvent = ({
 
   return (
     <div className="card  bg-base-100 shadow-xl">
-      <form className="card-body" action={onSubmit}>
+      <form
+        className="card-body"
+        action={eventId !== undefined ? onContinue : onSubmit}
+      >
         <div className="max-w-md" id="fileUpload">
           <div className="mb-2 block">
             <label htmlFor="file" /> Upload File <label />
@@ -143,7 +146,7 @@ export const CreateEvent = ({
             value={formState.eventName}
             onChange={changeHandler}
             placeholder="Event Name"
-            className="input input-bordered"
+            className="input input-bordered w-full max-w-xs"
           />
           {isAvailable === false ? (
             <p className="text-red-300">
@@ -155,27 +158,9 @@ export const CreateEvent = ({
         </div>
         <div>
           <div className="mb-2 block">
-            <label htmlFor="autocomplete-input">Location</label>
-          </div>
-          <AutocompleteInput />
-        </div>
-        <div>
-          <div className="mb-2 block">
-            <label htmlFor="date">Time & Date</label>
-          </div>
-          <input
-            className="input input-bordered w-full max-w-xs"
-            type="date"
-            id="date"
-            name="date"
-            title="Time & Date"
-          />
-        </div>
-        <div>
-          <div className="mb-2 block">
             <label htmlFor="description">Description</label>
           </div>
-          <EditorComponent />
+          <EditorComponent value={formState.description} />
         </div>
         <div>
           <input type="checkbox" className="toggle" />
@@ -198,8 +183,6 @@ export const CreateEvent = ({
             >
               Save
             </button>
-            {/* Style this message */}
-            {/* <p>{state?.message}</p> */}
           </div>
         </div>
       </form>
