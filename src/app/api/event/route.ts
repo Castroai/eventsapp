@@ -41,6 +41,7 @@ export async function POST(request: Request) {
           description: data.description,
           imgUrl: uploadUrl,
           progressStep: parseInt(data.progressStep),
+          status: "DRAFT",
         },
       };
       try {

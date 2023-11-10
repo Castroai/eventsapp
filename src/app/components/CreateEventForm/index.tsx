@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { CreateEvent } from "./CreateEvent";
 import { CreateTicket } from "./CreateTicket";
+import { number } from "zod";
 
 const FindVenueForm = () => {
   return <div>Find Event Form</div>;
@@ -17,8 +18,10 @@ interface FormState {
   eventDescription: string;
 }
 
-const MainForm = () => {
-  const [current, setCurrent] = useState(1);
+const MainForm = ({ progressStep }: { progressStep?: number | null }) => {
+  const [current, setCurrent] = useState(
+    typeof progressStep === "number" ? progressStep : 1
+  );
   const Next = () => current < 4 && setCurrent((v) => v + 1);
   const Back = () => current > 1 && setCurrent((v) => v - 1);
   const isNextButtonDisabled = current > 4;

@@ -91,6 +91,7 @@ export default async function Dashboard() {
                       <td>{event.eventName}</td>
                       <td>{event.location}</td>
                       <td>{event._count.comments}</td>
+                      <td>{event.status}</td>
                     </tr>
                   );
                 })}
