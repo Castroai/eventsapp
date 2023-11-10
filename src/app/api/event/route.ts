@@ -3,7 +3,7 @@ import prisma from "@/app/lib/db";
 import { uploadImage } from "@/app/lib/gstorage";
 import { Prisma } from "@prisma/client";
 import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ZodError, z } from "zod";
 const schema = z.object({
   eventName: z.string().min(1),
@@ -60,5 +60,23 @@ export async function POST(request: Request) {
     });
     console.log();
     return NextResponse.json(obj, { status: 500 });
+  }
+}
+
+export async function GET(request: NextRequest) {
+  const params = request.nextUrl.searchParams;
+  const session = await getServerSession(authOptions);
+  if (params.has("event")) {
+    const event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(params.get("event") as string),
+        AND: {
+          organizerId: session?.user?.id,
+        },
+      },
+    });
+    return NextResponse.json(event, { status: 200 });
+  } else {
+    return NextResponse.json({ err: "" }, { status: 500 });
   }
 }

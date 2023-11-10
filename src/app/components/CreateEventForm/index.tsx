@@ -18,7 +18,13 @@ interface FormState {
   eventDescription: string;
 }
 
-const MainForm = ({ progressStep }: { progressStep?: number | null }) => {
+const MainForm = ({
+  progressStep,
+  eventId,
+}: {
+  progressStep?: number | null;
+  eventId?: number;
+}) => {
   const [current, setCurrent] = useState(
     typeof progressStep === "number" ? progressStep : 1
   );
@@ -26,19 +32,23 @@ const MainForm = ({ progressStep }: { progressStep?: number | null }) => {
   const Back = () => current > 1 && setCurrent((v) => v - 1);
   const isNextButtonDisabled = current > 4;
   const isBackButtonDisabled = current === 1;
+
   const Steps: Record<
     number,
     ({
       next,
       back,
+      isNextButtonDisabled,
+      eventId,
     }: {
       next: () => void;
       back: () => void;
       isNextButtonDisabled: boolean;
+      eventId: number | undefined;
     }) => JSX.Element
   > = {
-    1: ({ next, isNextButtonDisabled }) =>
-      CreateEvent({ next, isNextButtonDisabled }),
+    1: ({ next, back, isNextButtonDisabled, eventId }) =>
+      CreateEvent({ next, isNextButtonDisabled, eventId }),
     2: ({ next, back }) => CreateTicket({ next, back }),
     3: FindVenueForm,
     4: ReviewAndCompletForm,
@@ -68,6 +78,7 @@ const MainForm = ({ progressStep }: { progressStep?: number | null }) => {
           next={Next}
           back={Back}
           isNextButtonDisabled={isNextButtonDisabled}
+          eventId={eventId}
         />
       </div>
     </div>
