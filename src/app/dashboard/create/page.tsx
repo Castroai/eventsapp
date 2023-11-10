@@ -3,6 +3,7 @@ import DashboardLayout from "@/app/components/Layouts/DashboardLayout";
 import { authOptions } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
 import { getServerSession } from "next-auth";
+import Link from "next/link";
 import { z } from "zod";
 
 const schema = z.object({
@@ -34,7 +35,7 @@ const CreateEventPage = async ({
         },
       },
     }));
-  const countOfDraftEvents = await prisma.event.count({
+  const draftEventst = await prisma.event.findMany({
     where: {
       organizerId: { equals: session?.user?.id },
       AND: {
@@ -45,18 +46,28 @@ const CreateEventPage = async ({
     },
   });
 
-  console.log(event);
-  if (countOfDraftEvents >= 1 && event === undefined) {
+  if (draftEventst.length >= 1 && event === undefined) {
     return (
       <DashboardLayout>
         <>
-          <p>You have draft event</p>
+          <p>You have draft events</p>
           <div className="flex gap-2">
             <div>
-              <button className="btn btn-primary">Continue</button>
-            </div>
-            <div>
-              <button className="btn btn-secondary">Create a new one</button>
+              {draftEventst.map((event) => {
+                return (
+                  <div className="card card-bordered p-2" key={event.id}>
+                    <p className="card-title">{event.eventName}</p>
+                    <div className="card-body">
+                      <Link
+                        href={`/dashboard/create/?event=${event.id}`}
+                        className="btn btn-primary"
+                      >
+                        Continue
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </>
@@ -65,7 +76,10 @@ const CreateEventPage = async ({
   } else if (event) {
     return (
       <DashboardLayout>
-        <MainForm progressStep={event && event.progressStep} />
+        <MainForm
+          progressStep={event && event.progressStep}
+          eventId={event.id}
+        />
       </DashboardLayout>
     );
   }
