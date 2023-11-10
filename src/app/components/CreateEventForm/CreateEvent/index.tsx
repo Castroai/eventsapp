@@ -60,7 +60,22 @@ export const CreateEvent = ({
       next();
     }
   };
-  const onContinue = async () => {};
+  const onContinue = async (formData: FormData) => {
+    setSubmitting(true);
+    formData.set("progressStep", "1");
+    const response = await fetch("/api/event", {
+      method: "PUT",
+      body: formData,
+    });
+    const status = response.status;
+    console.log(status);
+    if (status === 500) {
+      const error = await response.json();
+      setErrors(error.error);
+    } else {
+      next();
+    }
+  };
 
   const checkEventAvailability = async (name: string) => {
     try {
@@ -172,7 +187,7 @@ export const CreateEvent = ({
               type="submit"
               disabled={isNextButtonDisabled || submitting}
             >
-              Submit
+              Next
             </button>
           </div>
           <div>

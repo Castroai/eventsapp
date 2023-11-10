@@ -26,7 +26,7 @@ const MainForm = ({
   eventId?: number;
 }) => {
   const [current, setCurrent] = useState(
-    typeof progressStep === "number" ? progressStep : 1
+    typeof progressStep === "number" ? progressStep + 1 : 1
   );
   const Next = () => current < 4 && setCurrent((v) => v + 1);
   const Back = () => current > 1 && setCurrent((v) => v - 1);
