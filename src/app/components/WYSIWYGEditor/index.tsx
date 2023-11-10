@@ -12,7 +12,7 @@ export const EditorComponent = ({ value }: { value?: string | null }) => {
         name="description"
         id="description"
         style={{ display: "none" }}
-        required
+        value={value || ""}
       />
       <Editor
         apiKey={process.env.NEXT_PUBLIC_TINYMC_KEY || ""} // Use logical OR operator for default value

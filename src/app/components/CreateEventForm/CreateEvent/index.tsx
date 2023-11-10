@@ -1,5 +1,4 @@
 import { EditorComponent } from "../../WYSIWYGEditor";
-import AutocompleteInput from "../../AutoCompleteInput";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Event } from "@prisma/client";
 
@@ -73,6 +72,7 @@ export const CreateEvent = ({
       const error = await response.json();
       setErrors(error.error);
     } else {
+      setSubmitting(false);
       next();
     }
   };
@@ -173,15 +173,6 @@ export const CreateEvent = ({
               disabled={isNextButtonDisabled || submitting}
             >
               Next
-            </button>
-          </div>
-          <div>
-            <button
-              className="flex w-full btn btn-secondary disabled:bg-gray-400"
-              color="light"
-              type="button"
-            >
-              Save
             </button>
           </div>
         </div>
