@@ -1,10 +1,10 @@
+"use client";
 import { EditorComponent } from "../../WYSIWYGEditor";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Event } from "@prisma/client";
+import { createEvent, updateEvent } from "@/app/actions";
 
 interface CreatEventProps {
-  next: () => void;
-  isNextButtonDisabled: boolean;
   eventId?: number | undefined;
 }
 interface CreateEventFormState {
@@ -14,11 +14,7 @@ interface CreateEventFormState {
   date?: string | null;
   description?: string | null;
 }
-export const CreateEvent = ({
-  next,
-  isNextButtonDisabled,
-  eventId,
-}: CreatEventProps) => {
+export const CreateEvent = ({ eventId }: CreatEventProps) => {
   const [formState, setFormState] = useState<CreateEventFormState>({
     eventName: "",
     location: "",
@@ -41,40 +37,6 @@ export const CreateEvent = ({
       date: new Date(data.date!).toISOString(),
       description: data.description,
     });
-  };
-
-  const onSubmit = async (formData: FormData) => {
-    setSubmitting(true);
-    formData.set("progressStep", "1");
-    const response = await fetch("/api/event", {
-      method: "POST",
-      body: formData,
-    });
-    const status = response.status;
-    console.log(status);
-    if (status === 500) {
-      const error = await response.json();
-      setErrors(error.error);
-    } else {
-      next();
-    }
-  };
-  const onContinue = async (formData: FormData) => {
-    setSubmitting(true);
-    formData.set("eventId", `${eventId}`);
-    formData.set("progressStep", "1");
-    const response = await fetch("/api/event", {
-      method: "PUT",
-      body: formData,
-    });
-    const status = response.status;
-    if (status === 500) {
-      const error = await response.json();
-      setErrors(error.error);
-    } else {
-      setSubmitting(false);
-      next();
-    }
   };
 
   const checkEventAvailability = async (name: string) => {
@@ -111,11 +73,14 @@ export const CreateEvent = ({
     }
   }, [eventId]);
 
+  const createEventWithStep = createEvent.bind(null, `1`);
+  const updateEventWithId = updateEvent.bind(null, eventId!);
+
   return (
     <div className="card  bg-base-100 shadow-xl">
       <form
         className="card-body"
-        action={eventId !== undefined ? onContinue : onSubmit}
+        action={eventId !== undefined ? updateEventWithId : createEventWithStep}
       >
         <div className="max-w-md" id="fileUpload">
           <div className="mb-2 block">
@@ -170,7 +135,7 @@ export const CreateEvent = ({
             <button
               className="flex w-full btn btn-primary disabled:bg-gray-400"
               type="submit"
-              disabled={isNextButtonDisabled || submitting}
+              disabled={submitting}
             >
               Next
             </button>

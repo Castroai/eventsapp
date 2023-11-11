@@ -1,12 +1,17 @@
+import { createTicket } from "@/app/actions";
+import Link from "next/link";
+
 interface CreateTicketProps {
-  next: () => void;
-  back: () => void;
+  eventId: number;
 }
 
-export const CreateTicket = ({ next, back }: CreateTicketProps) => {
-  const submitHandler = () => {};
+export const CreateTicket = ({ eventId }: CreateTicketProps) => {
+  const createTicketWithEvent = createTicket.bind(null, eventId);
   return (
-    <form className="flex flex-col gap-2 justify-center items-center">
+    <form
+      action={createTicketWithEvent}
+      className="flex flex-col gap-2 justify-center items-center"
+    >
       <div className="form-control w-full max-w-xs">
         <label htmlFor="price">Price</label>
         <input
@@ -19,12 +24,16 @@ export const CreateTicket = ({ next, back }: CreateTicketProps) => {
       </div>
       <div className="flex gap-2">
         <div>
-          <button className="btn btn-primary" type="submit" onClick={back}>
+          <Link
+            href={`/dashboard/create?event=${eventId}`}
+            className="btn btn-primary"
+            type="submit"
+          >
             Back
-          </button>
+          </Link>
         </div>
         <div>
-          <button className="btn btn-primary" type="submit" onClick={next}>
+          <button className="btn btn-primary" type="submit">
             Submit
           </button>
         </div>

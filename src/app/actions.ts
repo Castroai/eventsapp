@@ -10,58 +10,12 @@ import { stripe } from "./lib/stripe";
 import { Prisma } from "@prisma/client";
 import { uploadImage } from "./lib/gstorage";
 
-export const createNewEvent = async (prevState: any, formData: FormData) => {
-  const session = await getServerSession(authOptions);
-  const schema = z.object({
-    eventName: z.string().min(1),
-    location: z.string(),
-    latitude: z.string(),
-    longitude: z.string(),
-    date: z.string().min(1),
-    description: z.string().min(1),
-  });
-  const data = schema.parse({
-    eventName: formData.get("eventName"),
-    location: formData.get("location"),
-    latitude: formData.get("latitude"),
-    longitude: formData.get("longitude"),
-    date: formData.get("date"),
-    description: formData.get("description"),
-  });
-  if (session?.user) {
-    const createSlug = (name: string) => {
-      // TODO: Better Slug
-      // Convert the name to lowercase and replace spaces with hyphens
-      const slug = name.toLowerCase().replace(/\s+/g, "-");
-      return slug;
-    };
-    let uploadUrl: string | undefined;
-    if (formData.has("file")) {
-      const file = formData.get("file") as File;
-      uploadUrl = await uploadImage(file);
-    }
-    const slug = createSlug(data.eventName);
-    const query: Prisma.EventCreateArgs = {
-      data: {
-        organizerId: session.user.id,
-        date: new Date(data.date),
-        description: data.description,
-        eventName: data.eventName,
-        lat: parseFloat(data.latitude),
-        long: parseFloat(data.longitude),
-        location: data.location,
-        imgUrl: uploadUrl,
-        slug: slug,
-      },
-    };
-    try {
-      await prisma.event.create(query);
-    } catch (error) {
-      const err = error as Error;
-      return { message: err.message };
-    }
-  }
-  redirect("/dashboard");
+// utils
+const createSlug = (name: string) => {
+  // TODO: Better Slug
+  // Convert the name to lowercase and replace spaces with hyphens
+  const slug = name.toLowerCase().replace(/\s+/g, "-");
+  return slug;
 };
 
 export const fetchOrCreateStripeConnectLink = async (formData: FormData) => {
@@ -174,5 +128,102 @@ export const likeEvent = async (eventId: number, formData: FormData) => {
     };
   } else {
     return {};
+  }
+};
+
+export const createTicket = async (eventId: number, formData: FormData) => {
+  "use server";
+  console.log(formData);
+  console.log(eventId);
+
+  const update = await prisma.event.update({
+    where: {
+      id: eventId,
+    },
+    data: {
+      tickets: {
+        create: {
+          price: parseFloat(formData.get("price") as string),
+          quantity: 1,
+        },
+      },
+    },
+  });
+
+  redirect(`/dashboard/create/venue?event=${eventId}`);
+};
+
+const createEventSchema = z.object({
+  eventName: z.string().min(1),
+  description: z.string(),
+});
+export const createEvent = async (progressStep: string, formData: FormData) => {
+  // 1. Get the current user session
+  const session = await getServerSession(authOptions);
+  if (session?.user?.id) {
+    //   2.v alidate the schema
+    const data = createEventSchema.parse({
+      eventName: formData.get("eventName"),
+      description: formData.get("description"),
+    });
+    const slug = createSlug(data.eventName);
+    let uploadUrl: string | undefined;
+
+    if (formData.has("file")) {
+      const file = formData.get("file") as File;
+      uploadUrl = await uploadImage(file);
+    }
+
+    const query: Prisma.EventCreateArgs = {
+      data: {
+        organizerId: session.user?.id,
+        slug: slug,
+        eventName: data.eventName,
+        description: data.description,
+        imgUrl: uploadUrl,
+        progressStep: parseInt(progressStep),
+        status: "DRAFT",
+      },
+    };
+    const res = await prisma.event.create(query);
+    redirect(`/dashboard/create/ticket?event=${res.id}`);
+  } else {
+    throw new Error("No User");
+  }
+};
+
+const schema = z.object({
+  eventName: z.string().min(1),
+  description: z.string(),
+});
+export const updateEvent = async (eventId: number, formData: FormData) => {
+  const session = await getServerSession(authOptions);
+  const data = schema.parse({
+    eventName: formData.get("eventName"),
+    description: formData.get("description"),
+    eventId: formData.get("eventId"),
+  });
+  if (session?.user?.id) {
+    let uploadUrl: string | undefined;
+    if (formData.has("file")) {
+      const file = formData.get("file") as File;
+      uploadUrl = await uploadImage(file);
+    }
+    const slug = createSlug(data.eventName);
+    const query: Prisma.EventUpdateArgs = {
+      where: {
+        id: eventId,
+      },
+      data: {
+        organizerId: session.user.id,
+        slug: slug,
+        eventName: data.eventName,
+        description: data.description,
+        imgUrl: uploadUrl,
+        status: "DRAFT",
+      },
+    };
+    await prisma.event.update(query);
+    redirect(`/dashboard/create/ticket?event=${eventId}`);
   }
 };
