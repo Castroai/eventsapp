@@ -1,6 +1,6 @@
 "use client";
-import MainForm from "@/app/components/CreateEventForm";
-import { CreateTicket } from "@/app/components/CreateEventForm/CreateTicket";
+import MainForm from "@/app/dashboard/create/components/FormLayout";
+import { CreateTicket } from "@/app/dashboard/create/components/CreateTicket";
 import DashboardLayout from "@/app/components/Layouts/DashboardLayout";
 import { z } from "zod";
 

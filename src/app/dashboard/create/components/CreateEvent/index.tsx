@@ -1,11 +1,11 @@
 "use client";
-import { EditorComponent } from "../../WYSIWYGEditor";
+import { EditorComponent } from "./WYSIWYGEditor";
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { Event } from "@prisma/client";
 import { createEvent, updateEvent } from "@/app/actions";
 
 interface CreatEventProps {
-  eventId?: number | undefined;
+  event?: Event | null;
 }
 interface CreateEventFormState {
   eventName: string;
@@ -14,7 +14,7 @@ interface CreateEventFormState {
   date?: string | null;
   description?: string | null;
 }
-export const CreateEvent = ({ eventId }: CreatEventProps) => {
+export const CreateEvent = ({ event }: CreatEventProps) => {
   const [formState, setFormState] = useState<CreateEventFormState>({
     eventName: "",
     location: "",
@@ -25,19 +25,6 @@ export const CreateEvent = ({ eventId }: CreatEventProps) => {
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<[{ [key: string]: string }]>();
   const [isAvailable, setIsAvailable] = useState<boolean>();
-
-  const fetchEventData = async (id: number) => {
-    const response = await fetch(`/api/event?event=${id}`, {
-      method: "GET",
-    });
-    const data = (await response.json()) as Event;
-    setFormState({
-      eventName: data.eventName,
-      location: data.location,
-      date: new Date(data.date!).toISOString(),
-      description: data.description,
-    });
-  };
 
   const checkEventAvailability = async (name: string) => {
     try {
@@ -68,19 +55,24 @@ export const CreateEvent = ({ eventId }: CreatEventProps) => {
   }, [formState.eventName]);
 
   useEffect(() => {
-    if (eventId) {
-      fetchEventData(eventId);
+    if (event) {
+      setFormState({
+        eventName: event.eventName,
+        location: event.location,
+        date: new Date(event.date!).toISOString(),
+        description: event.description,
+      });
     }
-  }, [eventId]);
+  }, [event]);
 
   const createEventWithStep = createEvent.bind(null, `1`);
-  const updateEventWithId = updateEvent.bind(null, eventId!);
+  const updateEventWithId = updateEvent.bind(null, event!.id);
 
   return (
     <div className="card  bg-base-100 shadow-xl">
       <form
         className="card-body"
-        action={eventId !== undefined ? updateEventWithId : createEventWithStep}
+        action={event !== null ? updateEventWithId : createEventWithStep}
       >
         <div className="max-w-md" id="fileUpload">
           <div className="mb-2 block">

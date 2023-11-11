@@ -1,4 +1,4 @@
-import { CommentBox } from "@/app/components/CommentBox";
+import { CommentBox } from "@/app/dashboard/components/CommentBox";
 import { MainLayout } from "@/app/components/Layouts/MainLayout";
 import { authOptions } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";

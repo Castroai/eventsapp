@@ -1,4 +1,4 @@
-import MainForm from "@/app/components/CreateEventForm";
+import MainForm from "@/app/dashboard/create/components/FormLayout";
 import DashboardLayout from "@/app/components/Layouts/DashboardLayout";
 import { z } from "zod";
 

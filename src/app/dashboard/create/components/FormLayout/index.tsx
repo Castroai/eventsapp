@@ -6,9 +6,7 @@ interface CreatEventProps {
   children: ReactNode;
 }
 const MainForm = ({ children }: CreatEventProps) => {
-  // const router = useRouter();
   const path = usePathname();
-  // const path = router.z;
   return (
     <div className="w-full  p-4 flex flex-col justify-center items-center ">
       <div>

@@ -1,5 +1,5 @@
-import MainForm from "@/app/components/CreateEventForm";
-import { CreateEvent } from "@/app/components/CreateEventForm/CreateEvent";
+import MainForm from "@/app/dashboard/create/components/FormLayout";
+import { CreateEvent } from "@/app/dashboard/create/components/CreateEvent";
 import DashboardLayout from "@/app/components/Layouts/DashboardLayout";
 import { authOptions } from "@/app/lib/auth";
 import prisma from "@/app/lib/db";
@@ -22,23 +22,22 @@ const CreateEventPage = async ({
   const data = schema.parse({
     event: searchParams.event && parseInt(searchParams.event as string),
   });
-  const event =
-    data.event &&
-    (await prisma.event.findUniqueOrThrow({
-      where: {
-        id: data.event,
+
+  const event = await prisma.event.findUnique({
+    where: {
+      id: data.event,
+      AND: {
+        organizerId: session?.user?.id,
         AND: {
-          organizerId: session?.user?.id,
-          AND: {
-            status: "DRAFT",
-          },
+          status: "DRAFT",
         },
       },
-    }));
+    },
+  });
 
   return (
     <DashboardLayout>
-      <MainForm>{<CreateEvent eventId={event && event.id} />}</MainForm>
+      <MainForm>{<CreateEvent event={event} />}</MainForm>
     </DashboardLayout>
   );
 };
