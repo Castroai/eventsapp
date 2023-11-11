@@ -32,14 +32,16 @@ const MainForm = ({ children }: CreatEventProps) => {
           </li>
           <li
             className={`step ${
-              path === "/dashboard/create/review" && "step-primary"
+              path === "/dashboard/create/confirm" && "step-primary"
             }`}
           >
             Preview and submit
           </li>
         </ul>
       </div>
-      <div className="w-full p-4">{children}</div>
+      <div className="w-full p-4 flex justify-center items-center">
+        {children}
+      </div>
     </div>
   );
 };

@@ -22,6 +22,17 @@ export const CreateTicket = ({ eventId }: CreateTicketProps) => {
           placeholder="9.99"
         />
       </div>
+      <div className="form-control w-full max-w-xs">
+        <label htmlFor="quantity">Quantity</label>
+        <input
+          id="quantity"
+          className={`input input-bordered w-full max-w-xs`}
+          type="number"
+          required
+          name="quantity"
+          placeholder="9.99"
+        />
+      </div>
       <div className="flex gap-2">
         <div>
           <Link

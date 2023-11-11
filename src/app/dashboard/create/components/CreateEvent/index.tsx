@@ -66,13 +66,16 @@ export const CreateEvent = ({ event }: CreatEventProps) => {
   }, [event]);
 
   const createEventWithStep = createEvent.bind(null, `1`);
-  const updateEventWithId = updateEvent.bind(null, event!.id);
+  let updateEventWithId;
+  if (event) {
+    updateEventWithId = updateEvent.bind(null, event.id);
+  }
 
   return (
     <div className="card  bg-base-100 shadow-xl">
       <form
         className="card-body"
-        action={event !== null ? updateEventWithId : createEventWithStep}
+        action={event ? updateEventWithId : createEventWithStep}
       >
         <div className="max-w-md" id="fileUpload">
           <div className="mb-2 block">

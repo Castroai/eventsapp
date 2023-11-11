@@ -7,7 +7,7 @@ import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 const schema = z.object({
-  event: z.number().optional(),
+  event: z.string().optional(),
 });
 
 const CreateEventPage = async ({
@@ -20,20 +20,24 @@ const CreateEventPage = async ({
 }) => {
   const session = await getServerSession(authOptions);
   const data = schema.parse({
-    event: searchParams.event && parseInt(searchParams.event as string),
+    event: searchParams.event,
   });
 
-  const event = await prisma.event.findUnique({
-    where: {
-      id: data.event,
-      AND: {
-        organizerId: session?.user?.id,
+  let event;
+
+  if (data.event) {
+    event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(data.event),
         AND: {
-          status: "DRAFT",
+          organizerId: session?.user?.id,
+          AND: {
+            status: "DRAFT",
+          },
         },
       },
-    },
-  });
+    });
+  }
 
   return (
     <DashboardLayout>

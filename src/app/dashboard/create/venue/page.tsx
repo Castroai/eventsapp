@@ -1,6 +1,7 @@
 import MainForm from "@/app/dashboard/create/components/FormLayout";
 import DashboardLayout from "@/app/components/Layouts/DashboardLayout";
 import { z } from "zod";
+import { SelectVenue } from "../components/SelectVenue";
 
 const schema = z.object({
   event: z.number(),
@@ -18,7 +19,7 @@ const VenueForm = ({
   return (
     <DashboardLayout>
       <MainForm>
-        <div>Venue Form</div>
+        <SelectVenue eventId={data.event} />
       </MainForm>
     </DashboardLayout>
   );

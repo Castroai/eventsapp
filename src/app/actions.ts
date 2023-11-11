@@ -144,13 +144,40 @@ export const createTicket = async (eventId: number, formData: FormData) => {
       tickets: {
         create: {
           price: parseFloat(formData.get("price") as string),
-          quantity: 1,
+          quantity: parseFloat(formData.get("quantity") as string),
         },
       },
     },
   });
 
   redirect(`/dashboard/create/venue?event=${eventId}`);
+};
+
+const venueSchema = z.object({
+  location: z.string().min(1),
+  lat: z.string().min(1),
+  long: z.string().min(1),
+});
+export const createVenue = async (eventId: number, formData: FormData) => {
+  const session = await getServerSession(authOptions);
+  const data = venueSchema.parse({
+    location: formData.get("location"),
+    lat: formData.get("latitude"),
+    long: formData.get("longitude"),
+  });
+  if (session?.user) {
+    const update = await prisma.event.update({
+      where: {
+        id: eventId,
+      },
+      data: {
+        location: data.location,
+        lat: parseFloat(data.lat),
+        long: parseFloat(data.long),
+      },
+    });
+    redirect(`/dashboard/create/confirm?event=${update.id}`);
+  }
 };
 
 const createEventSchema = z.object({
