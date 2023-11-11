@@ -26,7 +26,7 @@ const CreateEventPage = async ({
   let event;
 
   if (data.event) {
-    event = await prisma.event.findUnique({
+    event = await prisma.event.findUniqueOrThrow({
       where: {
         id: parseInt(data.event),
         AND: {
