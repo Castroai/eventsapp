@@ -5,6 +5,7 @@ import Skeleton from "./components/EventsGrid/skeleteon";
 import Await from "./components/EventsGrid/await";
 import { findClosestEvents } from "./lib/geo";
 import { FilterBox } from "./components/FilterBox";
+import Map from "./components/Maps";
 
 interface HomeProps {
   params: { slug: string };
@@ -39,6 +40,20 @@ export default async function Home({
     };
   }
   const items = findClosestEvents(location);
+
+  const locations = [
+    { lat: 37.7749, lng: -122.4194 }, // San Francisco
+    { lat: 34.0522, lng: -118.2437 }, // Los Angeles
+    // Add more locations as needed
+  ];
+
+  const loc = (await items).map((i) => {
+    return {
+      lat: i.lat!,
+      lng: i.long!,
+    };
+  });
+
   return (
     <MainLayout>
       <div className="flex flex-col gap-5 h-full justify-between dark:bg-current container mx-auto">
@@ -59,16 +74,21 @@ export default async function Home({
               </>
             )}
           </div>
-          <div className="flex gap-2">
-            <div className="w-1/3">
+          <div className="flex gap-2 flex-col">
+            <div className="w-full">
               <FilterBox minPrice={minPrice} address={address} />
             </div>
-            <div className="w-full">
-              <Suspense fallback={<Skeleton />}>
-                <Await promise={items}>
-                  {(events) => <EventsGrid allItems={events} />}
-                </Await>
-              </Suspense>
+            <div className="flex">
+              <div className="w-1/2">
+                <Suspense fallback={<Skeleton />}>
+                  <Await promise={items}>
+                    {(events) => <EventsGrid allItems={events} />}
+                  </Await>
+                </Suspense>
+              </div>
+              <div className="w-1/2">
+                <Map locations={loc} />
+              </div>
             </div>
           </div>
         </div>
