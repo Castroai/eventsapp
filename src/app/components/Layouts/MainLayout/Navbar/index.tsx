@@ -62,7 +62,8 @@ export default async function DefaultNavbar() {
         ) : (
           <>
             <div className="">
-              <SignInBUtton />
+              {/* <SignInBUtton /> */}
+              <Link href={"/login"}>Log in </Link>
             </div>
           </>
         )}
