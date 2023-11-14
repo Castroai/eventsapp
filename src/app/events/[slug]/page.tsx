@@ -65,22 +65,22 @@ export default async function Page({
                   </li>
                 )}
 
-                  <div className="pt-5">
-                <li className="badge badge-outline badge-lg font-bold ">
-                  {data.tickets.length > 0 && (
-                    <li className="flex gap-6">
-                      ${data.tickets[0].price}
+                <div className="pt-5">
+                  <li className="badge badge-outline badge-lg font-bold ">
+                    {data.tickets.length > 0 && (
+                      <li className="flex gap-6">
+                        ${data.tickets[0].price}
 
-                      {data.tickets.length > 0 && (
-                        <form action="">
-                          <button className="badge bg-gray-200" type="submit">Buy Now</button>
-                        </form>
-                      )}
-                    </li>
-                  )}
-                </li>
+                        {data.tickets.length > 0 && (
+                          <form action="">
+                            <button className="badge bg-gray-200" type="submit">Buy Now</button>
+                          </form>
+                        )}
+                      </li>
+                    )}
+                  </li>
                 </div>
-                
+
               </div>
             </div>
           </ul>
