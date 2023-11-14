@@ -65,9 +65,10 @@ export default async function Page({
                   </li>
                 )}
 
-                <li className="flex font-bold pt-6 ">
+                  <div className="pt-5">
+                <li className="badge badge-outline badge-lg font-bold ">
                   {data.tickets.length > 0 && (
-                    <li className="badge badge-lg badge-outline gap-6">
+                    <li className="flex gap-6">
                       ${data.tickets[0].price}
 
                       {data.tickets.length > 0 && (
@@ -78,32 +79,42 @@ export default async function Page({
                     </li>
                   )}
                 </li>
+                </div>
+                
               </div>
             </div>
           </ul>
 
-        <div className="font-bold text-2xl">Comments</div>
+          <div className="font-bold text-2xl">Comments</div>
           <div className="card card-bordered w-96 border-black p-6">
-            
+
             {session?.user && <CommentBox eventId={data.id} />}
 
-            <div className="card bg-gray-300">
-              <ul>
-                <li className="flex items-center">
-                <div className="text-2xl p-2"><BiSolidUserCircle /></div>
-                  {data.comments.length > 0 && (
-                    <>
-                      {data.comments.map((comment) => {
-                        return <div key={comment.id}>{comment.text}</div>;
-                      })}
-                    </>
-                  )}
-                </li>
-              </ul>
-            </div>
+            {data.comments.length > 0 && (
+
+              <div>
+                {data.comments.length > 0 && (
+                  <>
+                    {data.comments.map((comment) => {
+                      return (
+                        <div key={comment.id} className="card bg-gray-300 m-5">
+                          <ul>
+                            <li className="flex items-center">
+                              <div className="text-2xl p-2"><BiSolidUserCircle /></div>
+                              <div key={comment.id}>{comment.text}</div>
+                            </li>
+                          </ul>
+                        </div>
+                      );
+                    })}
+                  </>
+                )}
+              </div>
+            )}
 
           </div>
-        </div>
+                  
+      </div>
       </MainLayout>
       
     );
