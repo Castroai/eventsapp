@@ -97,7 +97,7 @@ export default async function Page({
                   <>
                     {data.comments.map((comment) => {
                       return (
-                        <div className="card bg-gray-300 m-5">
+                        <div key={comment.id} className="card bg-gray-300 m-5">
                           <ul>
                             <li className="flex items-center">
                               <div className="text-2xl p-2"><BiSolidUserCircle /></div>
