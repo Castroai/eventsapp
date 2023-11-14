@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { ImLocation } from 'react-icons/im';
 import { AiFillLike } from 'react-icons/ai'
+import { BiSolidUserCircle } from 'react-icons/bi'
 
 export default async function Page({
   params,
@@ -78,26 +79,33 @@ export default async function Page({
                   )}
                 </li>
               </div>
-
-              <div className="col-span-1"></div>
             </div>
           </ul>
-          {session?.user && <CommentBox eventId={data.id} />}
-          <div>
-            <ul>
-              <li>
-                {data.comments.length > 0 && (
-                  <>
-                    {data.comments.map((comment) => {
-                      return <div key={comment.id}>{comment.text}</div>;
-                    })}
-                  </>
-                )}
-              </li>
-            </ul>
+
+        <div className="font-bold text-2xl">Comments</div>
+          <div className="card card-bordered w-96 border-black p-6">
+            
+            {session?.user && <CommentBox eventId={data.id} />}
+
+            <div className="card bg-gray-300">
+              <ul>
+                <li className="flex items-center">
+                <div className="text-2xl p-2"><BiSolidUserCircle /></div>
+                  {data.comments.length > 0 && (
+                    <>
+                      {data.comments.map((comment) => {
+                        return <div key={comment.id}>{comment.text}</div>;
+                      })}
+                    </>
+                  )}
+                </li>
+              </ul>
+            </div>
+
           </div>
         </div>
       </MainLayout>
+      
     );
   } else {
     return <div>Error Fetching Data</div>;

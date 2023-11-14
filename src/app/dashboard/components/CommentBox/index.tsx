@@ -8,9 +8,10 @@ export const CommentBox = ({ eventId }: { eventId: number }) => {
         className="textarea textarea-bordered"
         name="comment"
         id="comment"
-        placeholder="Awesome"
+        placeholder="Comment here"
       ></textarea>
-      <button type="submit">Submit</button>
+      <br/>
+      <button className="badge bg-gray-200" type="submit">Submit</button>
     </form>
   );
 };
