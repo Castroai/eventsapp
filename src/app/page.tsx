@@ -41,12 +41,6 @@ export default async function Home({
   }
   const items = findClosestEvents(location);
 
-  const locations = [
-    { lat: 37.7749, lng: -122.4194 }, // San Francisco
-    { lat: 34.0522, lng: -118.2437 }, // Los Angeles
-    // Add more locations as needed
-  ];
-
   const loc = (await items).map((i) => {
     return {
       lat: i.lat!,
@@ -66,12 +60,10 @@ export default async function Home({
                 </h1>
               </div>
             ) : (
-              <>
-                <p className="text-lg font-semibold">
-                  Showing results for events near:{" "}
-                  <p className="underline">{address}</p>
-                </p>
-              </>
+              <p className="text-lg font-semibold">
+                Showing results for events near:{" "}
+                <p className="underline">{address}</p>
+              </p>
             )}
           </div>
           <div className="flex gap-2 flex-col">

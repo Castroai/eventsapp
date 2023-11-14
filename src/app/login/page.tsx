@@ -3,23 +3,37 @@ import Link from "next/link";
 import { SignInAuthorizationParams, signIn } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { ChangeEvent, FormEvent, useState } from "react";
+import { MainLayout } from "../components/Layouts/MainLayout";
 
 const SignInPage = () => {
   const [formState, setFormState] = useState({
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
+
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/profile";
+  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-    await signIn("credentials", {
-      redirect: true,
+
+    const res = await signIn("credentials", {
+      redirect: false,
       email: formState.email,
       password: formState.password,
       callbackUrl,
     });
+    if (res?.ok) {
+      console.log("success");
+      return;
+    } else {
+      // Toast failed
+      setError("Failed! Check you input and try again.");
+      // return;
+      console.log("Failed", res);
+    }
+    return res;
   };
 
   const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -71,7 +85,10 @@ const SignInPage = () => {
             Login
           </button>
         </div>
-        <Link href={"/register"}>Don't have an account</Link>
+        <Link className="link link-primary" href={"/register"}>
+          No account ?
+        </Link>
+        {error && JSON.stringify(error)}
       </form>
     </div>
   );
