@@ -21,7 +21,7 @@ export const FilterBox = ({
         </label>
         <SearchBar address={address} />
       </div>
-      <div className="form-control w-full max-w-xs">
+      {/* <div className="form-control w-full max-w-xs">
         <label className="label">
           <span className="label-text">Price Range $ {price}</span>
         </label>
@@ -35,7 +35,7 @@ export const FilterBox = ({
           className="range range-primary"
           name="minPrice"
         />
-      </div>
+      </div> */}
     </form>
   );
 };

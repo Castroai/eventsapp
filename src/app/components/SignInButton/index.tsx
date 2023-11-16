@@ -2,7 +2,15 @@
 import { signIn } from "next-auth/react";
 
 export const SignInBUtton = () => (
-  <button className="gsi-material-button" onClick={() => signIn("google")}>
+  <button
+    className="gsi-material-button"
+    onClick={() =>
+      signIn("google", {
+        redirect: true,
+        callbackUrl: "/",
+      })
+    }
+  >
     <div className="gsi-material-button-state"></div>
     <div className="gsi-material-button-content-wrapper">
       <div className="gsi-material-button-icon">

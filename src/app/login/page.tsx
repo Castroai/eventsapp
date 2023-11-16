@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 };
 const LoginPage = () => {
   return (
-    <div>
+    <div className="justify-center items-center flex h-full">
       <LoginFormComponent />
     </div>
   );

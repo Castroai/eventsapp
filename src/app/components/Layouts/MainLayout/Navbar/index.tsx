@@ -60,12 +60,9 @@ export default async function DefaultNavbar() {
             </div>
           </div>
         ) : (
-          <>
-            <div className="">
-              {/* <SignInBUtton /> */}
-              <Link href={"/login"}>Log in </Link>
-            </div>
-          </>
+          <div className="flex w-20">
+            <Link href={"/login"}>Log in</Link>
+          </div>
         )}
       </div>
     </div>

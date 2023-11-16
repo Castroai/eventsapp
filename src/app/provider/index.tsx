@@ -14,7 +14,7 @@ export const NextAuthProvider = ({ children }: Props) => {
         apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
         libraries={["places"]}
       >
-        <div className="flex-1">{children}</div>
+        <main className="flex flex-col h-screen">{children}</main>
       </Wrapper>
     </SessionProvider>
   );

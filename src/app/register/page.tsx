@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 const RegisterPage = () => {
   return (
-    <div>
+    <div className="justify-center items-center flex h-full">
       <RegisterFormComponent />
     </div>
   );

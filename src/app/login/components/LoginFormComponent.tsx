@@ -1,5 +1,6 @@
 "use client";
 import { FormWrapper } from "@/app/components/FormWrapper";
+import { SignInBUtton } from "@/app/components/SignInButton";
 import { TextInput, Button } from "@/app/components/ui";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
@@ -46,6 +47,8 @@ export const LoginFormComponent = () => {
       <div className="">
         <Link href={"/register"}>Make a new account</Link>
       </div>
+      <div className="divider">or</div>
+      <SignInBUtton />
     </FormWrapper>
   );
 };
