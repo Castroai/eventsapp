@@ -91,29 +91,29 @@ export default async function Page({
             {session?.user && <CommentBox eventId={data.id} />}
 
             {data.comments.length > 0 && (
-
               <div>
                 {data.comments.length > 0 && (
                   <>
-                    {data.comments.map((comment) => {
-                      return (
-                        <div key={comment.id} className="card bg-gray-300 m-5">
-                          <ul>
-                            <li className="flex items-center">
-                              <div className="text-2xl p-2"><BiSolidUserCircle /></div>
-                              <div key={comment.id}>{comment.text}</div>
-                            </li>
-                          </ul>
-                        </div>
-                      );
-                    })}
+                    {data.comments.map((comment) => (
+                      <div key={comment.id} className="card bg-gray-300 mt-5">
+                        <ul className="flex items-center justify-between">
+                          <li className="flex items-center">
+                            <div className="text-2xl p-2"><BiSolidUserCircle /></div>
+                            <div key={comment.id}>{comment.text}</div>
+                          </li>
+                          <li className="text-xs mr-2">
+                            {comment.createdAt.getMonth()}/{comment.createdAt.getDay()}/{comment.createdAt.getFullYear()}
+                          </li>
+                        </ul>
+                      </div>
+                    ))}
                   </>
                 )}
               </div>
             )}
 
           </div>
-                  
+
       </div>
       </MainLayout>
       
